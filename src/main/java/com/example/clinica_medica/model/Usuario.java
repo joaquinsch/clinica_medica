@@ -2,17 +2,18 @@ package com.example.clinica_medica.model;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@MappedSuperclass // esto es para que puedan heredar otras clases sin que esta sea un Entity
 public class Usuario {
 
 	private String nombre;
