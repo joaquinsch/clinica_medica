@@ -1,10 +1,14 @@
 package com.example.clinica_medica.model;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -13,11 +17,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "servicios_medicos")
-@Getter @Setter
+//@Table(name = "servicios_medicos")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ServicioMedico extends TipoDeConsulta{
+public class ServicioMedico {
 
 	/**
 	 * 
@@ -28,8 +33,11 @@ public class ServicioMedico extends TipoDeConsulta{
 	private String nombre;
 	private String descripcion;
 	private Double precio;
-	
-	@ManyToOne
-	@JoinColumn(name = "codigo_paquete")
-	private PaqueteServicio un_paquete_servicio;
+	// es manytomany
+	@ManyToMany
+	@JoinTable(name = "rel_serviciomedico_paquete", 
+		joinColumns = @JoinColumn(name = "codigo_servicio"), 
+		inverseJoinColumns = @JoinColumn(name = "codigo_paquete"))
+	private List<PaqueteServicio> lista_paquetes;
+
 }

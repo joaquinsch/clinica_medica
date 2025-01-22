@@ -11,7 +11,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,11 +37,26 @@ public class ConsultaMedica {
 	private LocalDate fecha_consulta;
 	private LocalTime hora_consulta;
 	@ManyToOne
+	@JoinColumn(name = "id_paciente")
 	private Paciente un_paciente;
 	@ManyToOne
+	@JoinColumn(name = "id_medico")
 	private Medico un_medico;
-	private TipoDeConsulta tipo_de_consulta;
-	private Long id_servicio_o_paquete;
+
+	 /* ACA NO ENCONTRE OTRA FORMA DE PODER ELEGIR SI LA CONSULTAMEDICA ES
+	  * CON PAQUETE O CON SERVICIOMEDICO.
+	  * 
+	  * EN LA TABLA VA A QUEDAR UNO DE LOS DOS EN NULL YA QUE LA CONSULTA MEDICA
+	  * SE ELIGE POR PAQUETE O POR SERVICIO MEDICO.
+	  * 
+	  */
+	@OneToOne
+	@JoinColumn(name = "codigo_paquete")
+	private PaqueteServicio un_paquete_servicio;
+	@OneToOne
+	@JoinColumn(name = "codigo_servicio")
+	private ServicioMedico un_servicio_medico;
+
 	private Double monto_total;
 	private Boolean pagado_o_no;
 }
