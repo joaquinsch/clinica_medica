@@ -65,6 +65,18 @@ public class PacienteServiceTests {
 		Assertions.assertEquals("raul", pacienteEditado.getNombre());
 		
 	}
+	
+	@Test
+	public void deberiaDarErrorSiIntentaBuscarPacienteInexistente() {
+		Paciente paciente = new Paciente();
+		paciente.setId_paciente(1L);
+		paciente.setNombre("carlos");
+		Mockito.when(pacienteRepo.findById(2L)).thenReturn(Optional.empty());
+
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
+		        pacienteService.buscarPaciente(2L);
+		   });
+	}
 
 	@Test
 	public void deberiaDarErrorSiIntentaEditarPacienteInexistente() {
