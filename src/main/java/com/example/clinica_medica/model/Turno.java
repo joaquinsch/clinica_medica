@@ -24,7 +24,7 @@ public class Turno {
 	private Long id_turno;
 	private LocalDate fecha_turno;
 	@ManyToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id_medico")
 	private Medico un_medico;
 
 }
