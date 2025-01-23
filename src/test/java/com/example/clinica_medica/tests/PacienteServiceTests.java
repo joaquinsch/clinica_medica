@@ -1,5 +1,6 @@
 package com.example.clinica_medica.tests;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.clinica_medica.model.Paciente;
 import com.example.clinica_medica.repository.PacienteRepository;
 import com.example.clinica_medica.services.PacienteService;
+import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
 @ExtendWith(MockitoExtension.class)
 public class PacienteServiceTests {
@@ -61,5 +63,17 @@ public class PacienteServiceTests {
 		Assertions.assertEquals(1L, pacienteEditado.getId_paciente());
 		Assertions.assertEquals("raul", pacienteEditado.getNombre());
 		
+	}
+
+	@Test
+	public void deberiaDarErrorSiIntentaEditarPacienteInexistente() {
+		Paciente paciente = new Paciente();
+		paciente.setId_paciente(1L);
+		paciente.setNombre("carlos");
+		Mockito.when(pacienteRepo.findById(2L)).thenReturn(Optional.empty());
+
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
+		        pacienteService.editarPaciente(2L, paciente);
+		   });
 	}
 }
