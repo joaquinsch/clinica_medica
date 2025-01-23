@@ -45,7 +45,7 @@ public class PacienteController {
 		}
 	}
 
-	@PutMapping("/editar/{id_paciente}")
+	@PutMapping("/editar")
 	public ResponseEntity<?> editarPaciente(@RequestBody Paciente paciente) {
 		try {
 			Paciente aEditar = pacienteService.editarPaciente(paciente);
