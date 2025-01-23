@@ -24,7 +24,7 @@ public class Turno {
 	private Long id_turno;
 	private LocalDate fecha_turno;
 	@ManyToOne
-	@JoinColumn(name = "id_medico")
+	@JoinColumn(name = "id_medico")// VER LA TABLA, SE AGREGÓ MAL EL ID
 	private Medico un_medico;
 
 }
