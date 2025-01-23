@@ -20,4 +20,19 @@ public class PacienteService {
 		return pacienteRepo.findById(id_paciente).orElseThrow();
 
 	}
+
+	public Paciente editarPaciente(Long id_paciente, Paciente paciente) {
+		Paciente pacienteBuscado = buscarPaciente(id_paciente);
+		pacienteBuscado.setApellido(paciente.getApellido());
+		pacienteBuscado.setConsultas(paciente.getConsultas());
+		pacienteBuscado.setDireccion(paciente.getDireccion());
+		pacienteBuscado.setDni(paciente.getDni());
+		pacienteBuscado.setEmail(paciente.getEmail());
+		pacienteBuscado.setFecha_nac(paciente.getFecha_nac());
+		pacienteBuscado.setId_paciente(paciente.getId_paciente());
+		pacienteBuscado.setNombre(paciente.getNombre());
+		pacienteBuscado.setTelefono(paciente.getTelefono());
+		return pacienteRepo.save(pacienteBuscado);
+		
+	}
 }

@@ -46,4 +46,20 @@ public class PacienteServiceTests {
 		Assertions.assertEquals(1L, pacienteRecuperado.getId_paciente());
 		Assertions.assertEquals("carlos", pacienteRecuperado.getNombre());
 	}
+	
+	@Test
+	public void deberiaEditarUnPaciente() {
+		Paciente paciente = new Paciente();
+		paciente.setId_paciente(1L);
+		paciente.setNombre("carlos");
+		Mockito.when(pacienteRepo.findById(paciente.getId_paciente())).thenReturn(Optional.of(paciente));
+		Mockito.when(pacienteRepo.save(paciente)).thenReturn(paciente);
+		Paciente paciente2 = new Paciente();
+		paciente2.setId_paciente(1L);
+		paciente2.setNombre("raul");
+		Paciente pacienteEditado = pacienteService.editarPaciente(paciente.getId_paciente(), paciente2);
+		Assertions.assertEquals(1L, pacienteEditado.getId_paciente());
+		Assertions.assertEquals("raul", pacienteEditado.getNombre());
+		
+	}
 }
