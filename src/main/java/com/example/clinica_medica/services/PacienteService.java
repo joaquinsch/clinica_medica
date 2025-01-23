@@ -8,11 +8,16 @@ import com.example.clinica_medica.repository.PacienteRepository;
 
 @Service
 public class PacienteService {
-	
+
 	@Autowired
 	private PacienteRepository pacienteRepo;
-	
+
 	public Paciente guardarPaciente(Paciente paciente) {
 		return pacienteRepo.save(paciente);
+	}
+
+	public Paciente buscarPaciente(Long id_paciente) {
+		return pacienteRepo.findById(id_paciente).orElseThrow();
+
 	}
 }
