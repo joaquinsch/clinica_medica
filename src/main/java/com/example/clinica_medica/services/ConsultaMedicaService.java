@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.clinica_medica.model.ConsultaMedica;
-import com.example.clinica_medica.model.Paciente;
+
 import com.example.clinica_medica.repository.ConsultaMedicaRepository;
 
 @Service
@@ -37,7 +37,7 @@ public class ConsultaMedicaService {
 	}
 
 	public void eliminarConsultaMedica(Long id_consulta) {
-		// busca el paciente, si no existe tira excepcion
+		// busca, si no existe tira excepcion
 	    @SuppressWarnings("unused")
 	    ConsultaMedica consultaMedica = buscarConsultaMedica(id_consulta);
 	    consultaMedicaRepo.deleteById(id_consulta);
