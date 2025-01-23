@@ -21,8 +21,8 @@ public class PacienteService {
 
 	}
 
-	public Paciente editarPaciente(Long id_paciente, Paciente paciente) {
-		Paciente pacienteBuscado = buscarPaciente(id_paciente);
+	public Paciente editarPaciente(Paciente paciente) {
+		Paciente pacienteBuscado = buscarPaciente(paciente.getId_paciente());
 		pacienteBuscado.setApellido(paciente.getApellido());
 		pacienteBuscado.setConsultas(paciente.getConsultas());
 		pacienteBuscado.setDireccion(paciente.getDireccion());
