@@ -60,7 +60,7 @@ public class PacienteServiceTests {
 		Paciente paciente2 = new Paciente();
 		paciente2.setId_paciente(1L);
 		paciente2.setNombre("raul");
-		Paciente pacienteEditado = pacienteService.editarPaciente(paciente.getId_paciente(), paciente2);
+		Paciente pacienteEditado = pacienteService.editarPaciente(paciente2);
 		Assertions.assertEquals(1L, pacienteEditado.getId_paciente());
 		Assertions.assertEquals("raul", pacienteEditado.getNombre());
 		
@@ -81,12 +81,12 @@ public class PacienteServiceTests {
 	@Test
 	public void deberiaDarErrorSiIntentaEditarPacienteInexistente() {
 		Paciente paciente = new Paciente();
-		paciente.setId_paciente(1L);
+		paciente.setId_paciente(2L);
 		paciente.setNombre("carlos");
 		Mockito.when(pacienteRepo.findById(2L)).thenReturn(Optional.empty());
 
 		Assertions.assertThrows(NoSuchElementException.class, () -> {
-		        pacienteService.editarPaciente(2L, paciente);
+		        pacienteService.editarPaciente(paciente);
 		   });
 	}
 

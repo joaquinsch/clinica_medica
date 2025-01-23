@@ -33,11 +33,13 @@ public class PacienteService {
 		pacienteBuscado.setNombre(paciente.getNombre());
 		pacienteBuscado.setTelefono(paciente.getTelefono());
 		return pacienteRepo.save(pacienteBuscado);
-		
+
 	}
 
 	public void eliminarPaciente(Long id_paciente) {
-		pacienteRepo.deleteById(id_paciente);
-		
+		// busca el paciente, si no existe tira excepcion
+	    @SuppressWarnings("unused")
+		Paciente paciente = buscarPaciente(id_paciente);
+	    pacienteRepo.deleteById(id_paciente);
 	}
 }
