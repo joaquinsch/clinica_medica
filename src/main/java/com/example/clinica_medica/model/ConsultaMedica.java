@@ -3,17 +3,14 @@ package com.example.clinica_medica.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,7 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 //esto crea un campo "discriminador" para diferenciar entre ConsultaMedica con paquete o serviciomedico
-//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // une en 1 tabla las clases q hereden
 //@DiscriminatorColumn(name = "tipo_consulta", discriminatorType = DiscriminatorType.STRING)
 public class ConsultaMedica {
 	@Id
