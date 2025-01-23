@@ -35,4 +35,9 @@ public class PacienteService {
 		return pacienteRepo.save(pacienteBuscado);
 		
 	}
+
+	public void eliminarPaciente(Long id_paciente) {
+		pacienteRepo.deleteById(id_paciente);
+		
+	}
 }

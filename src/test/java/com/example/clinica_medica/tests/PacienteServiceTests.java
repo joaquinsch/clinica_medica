@@ -1,5 +1,7 @@
 package com.example.clinica_medica.tests;
 
+import static org.mockito.Mockito.times;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -14,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.example.clinica_medica.model.Paciente;
 import com.example.clinica_medica.repository.PacienteRepository;
 import com.example.clinica_medica.services.PacienteService;
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
 @ExtendWith(MockitoExtension.class)
 public class PacienteServiceTests {
@@ -75,5 +76,17 @@ public class PacienteServiceTests {
 		Assertions.assertThrows(NoSuchElementException.class, () -> {
 		        pacienteService.editarPaciente(2L, paciente);
 		   });
+	}
+
+	@Test
+	public void deberiaEliminarElPaciente() {
+		Paciente paciente = new Paciente();
+		paciente.setId_paciente(1L);
+		paciente.setNombre("carlos");
+		
+		pacienteService.eliminarPaciente(paciente.getId_paciente());
+		
+		Mockito.verify(pacienteRepo, times(1)).deleteById(paciente.getId_paciente());
+		
 	}
 }
