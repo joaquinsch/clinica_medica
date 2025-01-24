@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,6 +40,18 @@ public class PaqueteServicioController {
 			return ResponseEntity.status(HttpStatus.OK).body(paqueteBuscado);
 		} catch (NoSuchElementException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el paquete");
+		}
+	}
+
+	@PutMapping("/editar")
+	public ResponseEntity<?> editarPaqueteServicio(@RequestBody PaqueteServicio paqueteServicio) {
+		try {
+			PaqueteServicio paqueteEditado = paqueteServicioService.editarPaqueteServicio(paqueteServicio);
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(paqueteEditado);
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el paquete");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
 		}
 	}
 }
