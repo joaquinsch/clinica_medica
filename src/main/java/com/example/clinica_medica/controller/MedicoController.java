@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,10 +20,10 @@ import com.example.clinica_medica.services.MedicoService;
 @RestController
 @RequestMapping("/api/medicos")
 public class MedicoController {
-	
+
 	@Autowired
 	private MedicoService medicoService;
-	
+
 	@PostMapping("/crear")
 	public ResponseEntity<?> crearPaciente(@RequestBody Medico medico) {
 		try {
@@ -32,7 +33,7 @@ public class MedicoController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
 		}
 	}
-	
+
 	@GetMapping("/buscar/{id_medico}")
 	public ResponseEntity<?> crearPaciente(@PathVariable Long id_medico) {
 		try {
@@ -42,7 +43,17 @@ public class MedicoController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el médico");
 		}
 	}
-	
-	
+
+	@PutMapping("/editar")
+	public ResponseEntity<?> editarPaciente(@RequestBody Medico medico) {
+		try {
+			Medico aEditar = medicoService.editarMedico(medico);
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body(aEditar);
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el médico");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
+		}
+	}
 
 }
