@@ -22,4 +22,6 @@ public class Paciente extends Usuario {
 
 	@OneToMany(mappedBy = "un_paciente")
 	private List<ConsultaMedica> consultas;
+	
+	// AGREGAR SI TIENE O NO OBRA_SOCIAL
 }
