@@ -26,12 +26,12 @@ public class PacienteController {
 	// private ObjectMapper objectMapper;
 
 	@PostMapping("/crear")
-	public ResponseEntity<?> crearPaciente(@RequestBody Paciente paciente) {
+	public ResponseEntity<Paciente> crearPaciente(@RequestBody Paciente paciente) {
 		try {
 			pacienteService.guardarPaciente(paciente);
 			return ResponseEntity.status(HttpStatus.CREATED).body(paciente);
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class PacienteController {
 	}
 
 	@DeleteMapping("/eliminar/{id_paciente}")
-	public ResponseEntity<?> eliminarPaciente(@PathVariable Long id_paciente){
+	public ResponseEntity<?> eliminarPaciente(@PathVariable Long id_paciente) {
 		try {
 			pacienteService.eliminarPaciente(id_paciente);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Se ha eliminado");

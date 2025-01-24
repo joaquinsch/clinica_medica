@@ -6,6 +6,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 //import jakarta.persistence.Table;
@@ -16,16 +18,19 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "paquetes")
-@Getter @Setter
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaqueteServicio{
-
+public class PaqueteServicio {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo_paquete;
-	@ManyToMany(mappedBy = "lista_paquetes")
+	@ManyToMany
+	@JoinTable(name = "rel_paquete_serviciomedico", 
+		joinColumns = @JoinColumn(name = "codigo_paquete"), 
+		inverseJoinColumns = @JoinColumn(name = "codigo_servicio_medico"))
 	private List<ServicioMedico> lista_servicios_incluidos;
 	private String descripcion;
 	private Double precio_paquete;

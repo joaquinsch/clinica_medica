@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -23,20 +21,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ServicioMedico {
 
-	/**
-	 * 
-	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long codigo_servicio;
 	private String nombre;
 	private String descripcion;
 	private Double precio;
-	// es manytomany
-	@ManyToMany
-	@JoinTable(name = "rel_serviciomedico_paquete", 
-		joinColumns = @JoinColumn(name = "codigo_servicio"), 
-		inverseJoinColumns = @JoinColumn(name = "codigo_paquete"))
+
+	@ManyToMany(mappedBy = "lista_servicios_incluidos")
 	private List<PaqueteServicio> lista_paquetes;
 
 }
