@@ -15,15 +15,17 @@ import com.example.clinica_medica.services.ConsultaMedicaService;
 @RestController
 @RequestMapping("/api/consultasmedicas")
 public class ConsultaMedicaController {
-	
+
 	@Autowired
 	private ConsultaMedicaService consultaMedicaService;
-	
+
 	@PostMapping("/crear")
 	public ResponseEntity<?> crearConsultaMedica(@RequestBody ConsultaMedica consulta) {
 		try {
 			consultaMedicaService.guardarConsultaMedica(consulta);
 			return ResponseEntity.status(HttpStatus.CREATED).body(consulta);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
 		}

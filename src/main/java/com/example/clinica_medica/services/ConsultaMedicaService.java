@@ -14,14 +14,19 @@ public class ConsultaMedicaService {
 	private ConsultaMedicaRepository consultaMedicaRepo;
 
 	public ConsultaMedica guardarConsultaMedica(ConsultaMedica consulta) {
-		return consultaMedicaRepo.save(consulta);
+		if (consulta.getUn_servicio_medico() == null ^ consulta.getUn_paquete_servicio() == null) {
+			return consultaMedicaRepo.save(consulta);
+		} else {
+			throw new IllegalArgumentException(
+					"La consulta debe estar asociada a un único servicio médico o a un único paquete");
+		}
 	}
 
 	public ConsultaMedica buscarConsultaMedica(Long id_consulta) {
 		return consultaMedicaRepo.findById(id_consulta).orElseThrow();
 
 	}
-	
+
 	public ConsultaMedica editarPaciente(ConsultaMedica consulta) {
 		ConsultaMedica consultaMedica = buscarConsultaMedica(consulta.getId_consulta_medica());
 		consultaMedica.setId_consulta_medica(consulta.getId_consulta_medica());
@@ -38,9 +43,9 @@ public class ConsultaMedicaService {
 
 	public void eliminarConsultaMedica(Long id_consulta) {
 		// busca, si no existe tira excepcion
-	    @SuppressWarnings("unused")
-	    ConsultaMedica consultaMedica = buscarConsultaMedica(id_consulta);
-	    consultaMedicaRepo.deleteById(id_consulta);
+		@SuppressWarnings("unused")
+		ConsultaMedica consultaMedica = buscarConsultaMedica(id_consulta);
+		consultaMedicaRepo.deleteById(id_consulta);
 	}
 
 }
