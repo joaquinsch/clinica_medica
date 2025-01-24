@@ -26,7 +26,7 @@ public class MedicoController {
 	private MedicoService medicoService;
 
 	@PostMapping("/crear")
-	public ResponseEntity<?> crearPaciente(@RequestBody Medico medico) {
+	public ResponseEntity<?> crearMedico(@RequestBody Medico medico) {
 		try {
 			medicoService.guardarMedico(medico);
 			return ResponseEntity.status(HttpStatus.CREATED).body(medico);
@@ -36,10 +36,10 @@ public class MedicoController {
 	}
 
 	@GetMapping("/buscar/{id_medico}")
-	public ResponseEntity<?> crearPaciente(@PathVariable Long id_medico) {
+	public ResponseEntity<?> buscarMedico(@PathVariable Long id_medico) {
 		try {
 			Medico buscado = medicoService.buscarMedico(id_medico);
-			return ResponseEntity.status(HttpStatus.CREATED).body(buscado);
+			return ResponseEntity.status(HttpStatus.OK).body(buscado);
 		} catch (NoSuchElementException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el médico");
 		}

@@ -3,7 +3,7 @@ package com.example.clinica_medica.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +31,7 @@ public class Turno {
 	private LocalTime hora_turno;
 	@ManyToOne
 	@JoinColumn(name = "id_medico")
-	@JsonIgnore
+	@JsonBackReference
 	private Medico un_medico;
 
 }

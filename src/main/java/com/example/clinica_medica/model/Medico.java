@@ -2,6 +2,8 @@ package com.example.clinica_medica.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +24,7 @@ public class Medico extends Usuario {
 	private Long id_medico;
 	private String especialidad_medica;
 	@OneToMany(mappedBy = "un_medico")
+	@JsonManagedReference
 	private List<Turno> turnos_disponibles;
 	private Double sueldo;
 }

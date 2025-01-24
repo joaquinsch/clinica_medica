@@ -20,6 +20,12 @@ import com.example.clinica_medica.services.TurnoService;
 @RestController
 @RequestMapping("/api/turnos")
 public class TurnoController {
+	/*
+	 * Es necesario para
+	 * agregar turnos a un medico.
+	 * Se debe tener al medico creado, y luego crear el turno
+	 * asociandolo al medico.
+	 */
 
 	@Autowired
     private TurnoService turnoService;

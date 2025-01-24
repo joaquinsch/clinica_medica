@@ -39,7 +39,7 @@ public class PacienteController {
 	public ResponseEntity<?> buscarPaciente(@PathVariable Long id_paciente) {
 		try {
 			Paciente buscado = pacienteService.buscarPaciente(id_paciente);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(buscado);
+			return ResponseEntity.status(HttpStatus.OK).body(buscado);
 		} catch (NoSuchElementException e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el paciente");
 		}
