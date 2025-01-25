@@ -32,6 +32,9 @@ public class ConsultaMedica {
 	private Long id_consulta_medica;
 
 	private LocalDate fecha_consulta;
+	/*
+	 * La Hora se pasa en json como: "09:10" por ejemplo
+	 */
 	private LocalTime hora_consulta;
 	@ManyToOne
 	@JoinColumn(name = "id_paciente")

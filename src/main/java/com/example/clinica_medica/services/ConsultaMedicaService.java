@@ -13,13 +13,21 @@ public class ConsultaMedicaService {
 	@Autowired
 	private ConsultaMedicaRepository consultaMedicaRepo;
 
+	@Autowired
+	private TurnoService turnoService;
+
 	public ConsultaMedica guardarConsultaMedica(ConsultaMedica consulta) {
+		if (!turnoService.hayTurnoDisponible(consulta.getUn_medico(), consulta.getFecha_consulta(),
+				consulta.getHora_consulta())) {
+			throw new IllegalArgumentException("No hay turnos disponibles en el horario o fecha elegidos");
+		}
 		if (consulta.getUn_servicio_medico() == null ^ consulta.getUn_paquete_servicio() == null) {
 			return consultaMedicaRepo.save(consulta);
 		} else {
 			throw new IllegalArgumentException(
 					"La consulta debe estar asociada a un único servicio médico o a un único paquete");
 		}
+
 	}
 
 	public ConsultaMedica buscarConsultaMedica(Long id_consulta) {
