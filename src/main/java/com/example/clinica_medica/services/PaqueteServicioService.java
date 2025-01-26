@@ -21,6 +21,13 @@ public class PaqueteServicioService {
 
 	@Autowired
 	private ServicioMedicoRepository servicioMedicoRepo;
+	
+	/*
+	 * 
+	 * se debe crear el paquete pasandole a la lista de servicios, el id de cada servicio medico.
+	 * - fijarse que pasa si se pasa un servicio que no existe.
+	 * - fijarse el tema de pasar un monto o no... (porque ya se calcula al crearse el paquete)
+	 */
 
 	public PaqueteServicio guardarPaqueteServicio(PaqueteServicio paqueteServicio) {
 		List<ServicioMedico> serviciosDelPaquete = paqueteServicio.getLista_servicios_incluidos();
