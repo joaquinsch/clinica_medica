@@ -15,6 +15,13 @@ import com.example.clinica_medica.services.ConsultaMedicaService;
 @RestController
 @RequestMapping("/api/consultasmedicas")
 public class ConsultaMedicaController {
+	
+	/*
+	 * 
+	 * - TERMINAR CRUD CONSULTAMEDICA
+	 * - VERIFICAR QUE LOS MONTOS COINCIDAN EN TODOS LADOS (ESTO NO SE SI ESTA BIEN) 
+	 * - VERIFICAR DESCUENTO DE PAQUETES
+	 */
 
 	@Autowired
 	private ConsultaMedicaService consultaMedicaService;

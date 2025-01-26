@@ -12,6 +12,7 @@ public class ServicioMedicoService {
 	@Autowired
 	private ServicioMedicoRepository servicioMedicoRepo;
 
+
 	public ServicioMedico guardarServicioMedico(ServicioMedico servicioMedico) {
 		return servicioMedicoRepo.save(servicioMedico);
 	}

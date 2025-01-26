@@ -30,6 +30,7 @@ public class PaqueteServicioController {
 			PaqueteServicio nuevoPaquete = paqueteServicioService.guardarPaqueteServicio(paqueteServicio);
 			return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPaquete);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
 		}
 	}
