@@ -19,9 +19,11 @@ public class Paciente extends Usuario {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_paciente;
+	
+	private Boolean tiene_obra_social;
 
 	@OneToMany(mappedBy = "un_paciente")
 	private List<ConsultaMedica> consultas;
 	
-	// AGREGAR SI TIENE O NO OBRA_SOCIAL
+
 }

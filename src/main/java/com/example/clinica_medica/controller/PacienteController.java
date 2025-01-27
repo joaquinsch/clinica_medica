@@ -27,22 +27,16 @@ public class PacienteController {
 
 	@PostMapping("/crear")
 	public ResponseEntity<Paciente> crearPaciente(@RequestBody Paciente paciente) {
-		try {
-			pacienteService.guardarPaciente(paciente);
-			return ResponseEntity.status(HttpStatus.CREATED).body(paciente);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-		}
+		Paciente pacienteGuardado = pacienteService.guardarPaciente(paciente);
+		return new ResponseEntity<>(pacienteGuardado, HttpStatus.CREATED);
+
 	}
 
 	@GetMapping("/buscar/{id_paciente}")
-	public ResponseEntity<?> buscarPaciente(@PathVariable Long id_paciente) {
-		try {
-			Paciente buscado = pacienteService.buscarPaciente(id_paciente);
-			return ResponseEntity.status(HttpStatus.OK).body(buscado);
-		} catch (NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el paciente");
-		}
+	public ResponseEntity<Paciente> buscarPaciente(@PathVariable Long id_paciente) {
+		Paciente buscado = pacienteService.buscarPaciente(id_paciente);
+		return new ResponseEntity<>(buscado, HttpStatus.OK);
+
 	}
 
 	@PutMapping("/editar")
