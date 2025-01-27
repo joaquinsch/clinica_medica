@@ -34,4 +34,7 @@ public class PaqueteServicio {
 	private List<ServicioMedico> lista_servicios_incluidos;
 	private String descripcion;
 	private Double precio_paquete;
+	
+
+
 }
