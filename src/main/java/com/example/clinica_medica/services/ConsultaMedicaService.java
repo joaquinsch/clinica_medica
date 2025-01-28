@@ -3,6 +3,8 @@ package com.example.clinica_medica.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.clinica_medica.exception.ConsultaMedicaNoEncontradaError;
+import com.example.clinica_medica.exception.TurnoNoDisponibleError;
 import com.example.clinica_medica.model.ConsultaMedica;
 import com.example.clinica_medica.model.PaqueteServicio;
 import com.example.clinica_medica.model.ServicioMedico;
@@ -26,7 +28,7 @@ public class ConsultaMedicaService {
 	public ConsultaMedica guardarConsultaMedica(ConsultaMedica consulta) {
 		if (!turnoService.hayTurnoDisponible(consulta.getUn_medico(), consulta.getFecha_consulta(),
 				consulta.getHora_consulta())) {
-			throw new IllegalArgumentException("No hay turnos disponibles en el horario o fecha elegidos");
+			throw new TurnoNoDisponibleError("No hay turnos disponibles en el horario o fecha elegidos");
 		}
 		if (consulta.getUn_servicio_medico() == null ^ consulta.getUn_paquete_servicio() == null) {
 			if (consulta.getUn_servicio_medico() != null) {
@@ -48,7 +50,8 @@ public class ConsultaMedicaService {
 	}
 
 	public ConsultaMedica buscarConsultaMedica(Long id_consulta) {
-		return consultaMedicaRepo.findById(id_consulta).orElseThrow();
+		return consultaMedicaRepo.findById(id_consulta).orElseThrow(
+				() -> new ConsultaMedicaNoEncontradaError("La consulta médica con id: " + id_consulta + " no existe"));
 
 	}
 

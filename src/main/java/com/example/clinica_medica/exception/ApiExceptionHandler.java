@@ -11,10 +11,26 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(value = { PacienteNoEncontradoError.class })
 	public ResponseEntity<PacienteError> handlePacienteNoEncontradoError(PacienteNoEncontradoError e) {
 
-		PacienteError pacienteError = new 
-				PacienteError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
+		PacienteError pacienteError = new PacienteError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
 
 		return new ResponseEntity<>(pacienteError, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(value = { ConsultaMedicaNoEncontradaError.class })
+	public ResponseEntity<ConsultaMedicaError> handleConsultaMedicaNoEncontradaError(
+			ConsultaMedicaNoEncontradaError e) {
+		ConsultaMedicaError consultaMedicaError = new ConsultaMedicaError(e.getMessage(), e.getCause(),
+				HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(consultaMedicaError, HttpStatus.NOT_FOUND);
+
+	}
+
+	@ExceptionHandler(value = { TurnoNoDisponibleError.class })
+	public ResponseEntity<ConsultaMedicaError> handleConsultaMedicaNoEncontradaError(TurnoNoDisponibleError e) {
+		ConsultaMedicaError consultaMedicaError = new ConsultaMedicaError(e.getMessage(), e.getCause(),
+				HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(consultaMedicaError, HttpStatus.BAD_REQUEST);
+
 	}
 
 }

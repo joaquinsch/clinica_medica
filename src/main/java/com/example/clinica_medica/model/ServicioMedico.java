@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,5 +31,8 @@ public class ServicioMedico {
 
 	@ManyToMany(mappedBy = "lista_servicios_incluidos")
 	private List<PaqueteServicio> lista_paquetes;
+	
+	@OneToMany(mappedBy = "un_servicio_medico")
+	private List<ConsultaMedica> lista_consultas;
 
 }

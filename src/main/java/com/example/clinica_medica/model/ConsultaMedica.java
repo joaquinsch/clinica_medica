@@ -53,7 +53,7 @@ public class ConsultaMedica {
 	@OneToOne
 	@JoinColumn(name = "codigo_paquete")
 	private PaqueteServicio un_paquete_servicio;
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "codigo_servicio")
 	private ServicioMedico un_servicio_medico;
 
