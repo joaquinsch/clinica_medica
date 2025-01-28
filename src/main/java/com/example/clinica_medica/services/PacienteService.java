@@ -34,6 +34,7 @@ public class PacienteService {
 		pacienteBuscado.setId_paciente(paciente.getId_paciente());
 		pacienteBuscado.setNombre(paciente.getNombre());
 		pacienteBuscado.setTelefono(paciente.getTelefono());
+		pacienteBuscado.setTiene_obra_social(paciente.getTiene_obra_social());
 		return pacienteRepo.save(pacienteBuscado);
 
 	}

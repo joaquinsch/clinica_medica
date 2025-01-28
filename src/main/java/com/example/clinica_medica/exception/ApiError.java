@@ -5,9 +5,6 @@ import org.springframework.http.HttpStatus;
 import lombok.Getter;
 
 
-/*
- * ESTAS CLASES NO CREO Q SEAN NECESARIAS, CON UNA SOLA GENERAL YA ESTARIA BIEN
- */
 @Getter
 public class ApiError {
 	private final String mensaje;

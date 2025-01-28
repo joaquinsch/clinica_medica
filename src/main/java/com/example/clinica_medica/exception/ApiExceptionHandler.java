@@ -10,9 +10,7 @@ public class ApiExceptionHandler {
 
 	@ExceptionHandler(value = { PacienteNoEncontradoError.class })
 	public ResponseEntity<ApiError> handlePacienteNoEncontradoError(PacienteNoEncontradoError e) {
-
 		ApiError pacienteError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
-
 		return new ResponseEntity<>(pacienteError, HttpStatus.NOT_FOUND);
 	}
 

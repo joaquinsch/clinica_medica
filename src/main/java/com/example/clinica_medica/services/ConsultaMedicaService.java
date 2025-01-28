@@ -24,20 +24,30 @@ public class ConsultaMedicaService {
 
 	@Autowired
 	private PaqueteServicioService paqueteService;
+	
+	@Autowired
+	private PacienteService pacienteService;
 
 	public ConsultaMedica guardarConsultaMedica(ConsultaMedica consulta) {
 		if (!turnoService.hayTurnoDisponible(consulta.getUn_medico(), consulta.getFecha_consulta(),
 				consulta.getHora_consulta())) {
 			throw new TurnoNoDisponibleError("No hay turnos disponibles en el horario o fecha elegidos");
 		}
+
 		if (consulta.getUn_servicio_medico() == null ^ consulta.getUn_paquete_servicio() == null) {
+			// pide por servicio
 			if (consulta.getUn_servicio_medico() != null) {
 				ServicioMedico servicioMedico = servicioMedicoService
 						.buscarServicioMedico(consulta.getUn_servicio_medico().getCodigo_servicio());
 				consulta.setMonto_total(servicioMedico.getPrecio());
 			} else {
+				// pide por paquete
 				PaqueteServicio paqueteServicio = paqueteService
 						.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
+				// si tiene obra social aplica descuento de 20%
+				if (pacienteService.buscarPaciente(consulta.getUn_paciente().getId_paciente()).getTiene_obra_social()) {
+					paqueteServicio.setPrecio_paquete(paqueteServicio.getPrecio_paquete() - paqueteServicio.getPrecio_paquete() * 0.2);
+				}
 				consulta.setMonto_total(paqueteServicio.getPrecio_paquete());
 			}
 
