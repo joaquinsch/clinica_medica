@@ -1,7 +1,5 @@
 package com.example.clinica_medica.controller;
 
-import java.util.NoSuchElementException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,29 +38,18 @@ public class PacienteController {
 	}
 
 	@PutMapping("/editar")
-	public ResponseEntity<?> editarPaciente(@RequestBody Paciente paciente) {
-		try {
-			Paciente aEditar = pacienteService.editarPaciente(paciente);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(aEditar);
-
-		} catch (NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el paciente");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
-		}
+	public ResponseEntity<Paciente> editarPaciente(@RequestBody Paciente paciente) {
+		Paciente aEditar = pacienteService.editarPaciente(paciente);
+		return new ResponseEntity<>(aEditar, HttpStatus.ACCEPTED);
 	}
 
+	/*
+	 * Si lo elimina devuelve NOCONTENT.
+	 */
 	@DeleteMapping("/eliminar/{id_paciente}")
-	public ResponseEntity<?> eliminarPaciente(@PathVariable Long id_paciente) {
-		try {
-			pacienteService.eliminarPaciente(id_paciente);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Se ha eliminado");
-
-		} catch (NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El paciente no existe");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
-		}
+	public ResponseEntity<Paciente> eliminarPaciente(@PathVariable Long id_paciente) {
+		pacienteService.eliminarPaciente(id_paciente);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }
