@@ -75,8 +75,12 @@ public class ConsultaMedicaService {
 	public ConsultaMedica editarConsultaMedica(ConsultaMedica consulta) {
 		ConsultaMedica consultaMedica = buscarConsultaMedica(consulta.getId_consulta_medica());
 		consultaMedica.setId_consulta_medica(consulta.getId_consulta_medica());
-		consultaMedica.setFecha_consulta(consulta.getFecha_consulta());
-		consultaMedica.setHora_consulta(consulta.getHora_consulta());
+		if (turnoService.hayTurnoDisponible(consulta.getUn_medico(), consulta.getFecha_consulta(), consulta.getHora_consulta())) {
+			consultaMedica.setFecha_consulta(consulta.getFecha_consulta());
+			consultaMedica.setHora_consulta(consulta.getHora_consulta());		
+		} else {
+			throw new TurnoNoDisponibleError("No hay turnos disponibles en el horario o fecha elegidos");
+		}
 		consultaMedica.setUn_paciente(consulta.getUn_paciente());
 		consultaMedica.setUn_medico(consulta.getUn_medico());
 		consultaMedica.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
