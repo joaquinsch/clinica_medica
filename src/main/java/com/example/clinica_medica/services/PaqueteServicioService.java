@@ -41,7 +41,7 @@ public class PaqueteServicioService {
 				throw new NoSuchElementException("Uno de los servicios médicos ingresados no existe");
 			}
 		}
-		Double precioFinal = obtenerPrecioConDescuento(sumaDePrecios, DESCUENTO_PAQUETE);
+		Double precioFinal = paqueteServicio.obtenerPrecioConDescuento(sumaDePrecios, DESCUENTO_PAQUETE);
 		paqueteServicio.setPrecio_paquete(precioFinal);
 
 		return paqueteServicioRepo.save(paqueteServicio);
@@ -64,7 +64,5 @@ public class PaqueteServicioService {
 		paqueteServicioRepo.delete(paquete);
 	}
 
-	private Double obtenerPrecioConDescuento(Double monto, Double descuento) {
-		return monto -= monto * descuento;
-	}
+
 }

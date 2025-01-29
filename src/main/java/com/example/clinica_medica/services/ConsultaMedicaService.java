@@ -3,6 +3,7 @@ package com.example.clinica_medica.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.clinica_medica.exception.ConsultaMedicaConServicioYPaqueteError;
 import com.example.clinica_medica.exception.ConsultaMedicaNoEncontradaError;
 import com.example.clinica_medica.exception.TurnoNoDisponibleError;
 import com.example.clinica_medica.model.ConsultaMedica;
@@ -12,6 +13,8 @@ import com.example.clinica_medica.repository.ConsultaMedicaRepository;
 
 @Service
 public class ConsultaMedicaService {
+
+	private static final Double DESCUENTO_OBRA_SOCIAL = 0.2;
 
 	@Autowired
 	private ConsultaMedicaRepository consultaMedicaRepo;
@@ -46,14 +49,15 @@ public class ConsultaMedicaService {
 						.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
 				// si tiene obra social aplica descuento de 20%
 				if (pacienteService.buscarPaciente(consulta.getUn_paciente().getId_paciente()).getTiene_obra_social()) {
-					paqueteServicio.setPrecio_paquete(paqueteServicio.getPrecio_paquete() - paqueteServicio.getPrecio_paquete() * 0.2);
+					Double precioFinal = paqueteServicio.obtenerPrecioConDescuento(paqueteServicio.getPrecio_paquete(), DESCUENTO_OBRA_SOCIAL);
+					paqueteServicio.setPrecio_paquete(precioFinal);
 				}
 				consulta.setMonto_total(paqueteServicio.getPrecio_paquete());
 			}
 
 			return consultaMedicaRepo.save(consulta);
 		} else {
-			throw new IllegalArgumentException(
+			throw new ConsultaMedicaConServicioYPaqueteError(
 					"La consulta debe estar asociada a un único servicio médico o a un único paquete");
 		}
 
@@ -85,5 +89,6 @@ public class ConsultaMedicaService {
 		ConsultaMedica consultaMedica = buscarConsultaMedica(id_consulta);
 		consultaMedicaRepo.deleteById(id_consulta);
 	}
+
 
 }

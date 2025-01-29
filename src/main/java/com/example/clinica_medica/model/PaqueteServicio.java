@@ -35,6 +35,8 @@ public class PaqueteServicio {
 	private String descripcion;
 	private Double precio_paquete;
 	
-
+	public Double obtenerPrecioConDescuento(Double monto, Double descuento) {
+		return monto -= monto * descuento;
+	}
 
 }
