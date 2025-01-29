@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -51,5 +52,11 @@ public class ConsultaMedicaController {
 	public ResponseEntity<ConsultaMedica> buscarConsultaMedica(@PathVariable Long id_consulta_medica){
 		ConsultaMedica consultaBuscada = consultaMedicaService.buscarConsultaMedica(id_consulta_medica);
 		return new ResponseEntity<ConsultaMedica>(consultaBuscada, HttpStatus.OK);
+	}
+	
+	@PutMapping("/editar")
+	public ResponseEntity<ConsultaMedica> editarConsultaMedica(@RequestBody ConsultaMedica consultaMedica){
+		ConsultaMedica consultaBuscada = consultaMedicaService.editarConsultaMedica(consultaMedica);
+		return new ResponseEntity<ConsultaMedica>(consultaBuscada, HttpStatus.ACCEPTED);
 	}
 }

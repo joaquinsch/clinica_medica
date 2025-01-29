@@ -69,7 +69,7 @@ public class ConsultaMedicaService {
 
 	}
 
-	public ConsultaMedica editarPaciente(ConsultaMedica consulta) {
+	public ConsultaMedica editarConsultaMedica(ConsultaMedica consulta) {
 		ConsultaMedica consultaMedica = buscarConsultaMedica(consulta.getId_consulta_medica());
 		consultaMedica.setId_consulta_medica(consulta.getId_consulta_medica());
 		consultaMedica.setFecha_consulta(consulta.getFecha_consulta());
