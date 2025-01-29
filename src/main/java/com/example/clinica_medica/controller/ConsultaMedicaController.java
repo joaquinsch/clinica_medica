@@ -3,6 +3,7 @@ package com.example.clinica_medica.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,5 +59,11 @@ public class ConsultaMedicaController {
 	public ResponseEntity<ConsultaMedica> editarConsultaMedica(@RequestBody ConsultaMedica consultaMedica){
 		ConsultaMedica consultaBuscada = consultaMedicaService.editarConsultaMedica(consultaMedica);
 		return new ResponseEntity<ConsultaMedica>(consultaBuscada, HttpStatus.ACCEPTED);
+	}
+	
+	@DeleteMapping("/eliminar/{id_consulta_medica}")
+	public ResponseEntity<ConsultaMedica> eliminarConsultaMedica(@PathVariable Long id_consulta_medica){
+		consultaMedicaService.eliminarConsultaMedica(id_consulta_medica);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }
