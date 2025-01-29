@@ -20,13 +20,23 @@ import com.example.clinica_medica.services.ConsultaMedicaService;
 @RequestMapping("/api/consultasmedicas")
 public class ConsultaMedicaController {
 
-	/*
-	 * 
-	 * - TERMINAR CRUD CONSULTAMEDICA
+	/* 
 	 * - VERIFICAR QUE SI UN TURNO YA FUE USADO, NO PUEDA VOLVER A USARSE.
-	 * -REFACTOREAR HAYTURNODISPONIBLE PARA Q LLAME A SERVICES SOLO
+	 * - VERIFICAR FECHA Y HORA DE TURNO AL EDITAR CONSULTA MEDICA, DEBE HABER PARA EL TURNO INGRESADO.
+	 * - VERIFICAR QUE SI SE EDITA CONSULTA MEDICA PASANDOLE SERVICIO Y PAQUETE DE ERROR.
+	 * - VERIFICAR QUE SI SE QUIERE EDITAR EL CODIGO_PAQUETE, SEA UN PAQUETE EXISTENTE, Y QUE NO 
+	 * ESTÉ ASOCIADO A OTRA CONSULTA MEDICA.
+	 * - VERIFICAR QUE SI SE QUIERE EDITAR CODIGO_SERVICIO_MEDICO, EL SERVICIO EXISTA
+	 *  - VERIFICAR QUE SI SE QUIERE EDITAR ID-MEDICO, EXISTA EL MEDICO
+	 *  - VERIFICAR QUE SI SE QUIERE EDITAR ID-PACIENTE, EXISTA EL PACIENTE
+	 * -----------------------------------------------------------
+	 * - VERIFICAR TURNO AL ELIMINAR CONSULTA MEDICA, DEBE REESTABLECERSE EL TURNO.
+	 * - VERIFICAR QUE SI SE ELIMINA CONSULTA MEDICA, DEBE ELIMINARSE EL PAQUETE ASOCIADO A ELLA.
+	 * -----------------------------------------------------------------
+	 * - REFACTOREAR HAYTURNODISPONIBLE PARA Q LLAME A SERVICES SOLO
 	 * 
 	 * **********************************
+	 * 
 	 * -REVISAR RELACION N a N DE PAQUETES Y SERVICIOS (NO SE SI ES NECESARIO GUARDAR
 	 * ESTO) 
 	 * - PREGUNTAR POR CONSULTA MEDICA CON PAQUETE. YA QUE SE ESTÁ ASUMIENDO
@@ -52,13 +62,13 @@ public class ConsultaMedicaController {
 	@GetMapping("/buscar/{id_consulta_medica}")
 	public ResponseEntity<ConsultaMedica> buscarConsultaMedica(@PathVariable Long id_consulta_medica){
 		ConsultaMedica consultaBuscada = consultaMedicaService.buscarConsultaMedica(id_consulta_medica);
-		return new ResponseEntity<ConsultaMedica>(consultaBuscada, HttpStatus.OK);
+		return new ResponseEntity<>(consultaBuscada, HttpStatus.OK);
 	}
 	
 	@PutMapping("/editar")
 	public ResponseEntity<ConsultaMedica> editarConsultaMedica(@RequestBody ConsultaMedica consultaMedica){
 		ConsultaMedica consultaBuscada = consultaMedicaService.editarConsultaMedica(consultaMedica);
-		return new ResponseEntity<ConsultaMedica>(consultaBuscada, HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(consultaBuscada, HttpStatus.ACCEPTED);
 	}
 	
 	@DeleteMapping("/eliminar/{id_consulta_medica}")

@@ -33,5 +33,6 @@ public class Turno {
 	@JoinColumn(name = "id_medico")
 	@JsonBackReference
 	private Medico un_medico;
+	private Boolean disponibilidad;
 
 }

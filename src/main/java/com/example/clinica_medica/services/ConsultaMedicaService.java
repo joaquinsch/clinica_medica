@@ -9,6 +9,7 @@ import com.example.clinica_medica.exception.TurnoNoDisponibleError;
 import com.example.clinica_medica.model.ConsultaMedica;
 import com.example.clinica_medica.model.PaqueteServicio;
 import com.example.clinica_medica.model.ServicioMedico;
+import com.example.clinica_medica.model.Turno;
 import com.example.clinica_medica.repository.ConsultaMedicaRepository;
 
 @Service
@@ -54,7 +55,9 @@ public class ConsultaMedicaService {
 				}
 				consulta.setMonto_total(paqueteServicio.getPrecio_paquete());
 			}
-
+			// REFACTOREAER
+			Turno turno = turnoService.buscarTurnoPorFecha(consulta.getUn_medico(), consulta.getFecha_consulta(), consulta.getHora_consulta());
+			turnoService.buscarTurno(turno.getId_turno()).setDisponibilidad(false);
 			return consultaMedicaRepo.save(consulta);
 		} else {
 			throw new ConsultaMedicaConServicioYPaqueteError(

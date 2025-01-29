@@ -17,7 +17,7 @@ import com.example.clinica_medica.repository.TurnoRepository;
 public class TurnoService {
 	@Autowired
 	private TurnoRepository turnoRepo;
-	
+
 	@Autowired
 	private MedicoRepository medicoRepo;
 
@@ -35,7 +35,7 @@ public class TurnoService {
 		turnoBuscado.setFecha_turno(turno.getFecha_turno());
 		turnoBuscado.setHora_turno(turno.getHora_turno());
 		turnoBuscado.setUn_medico(turno.getUn_medico());
-
+		turnoBuscado.setDisponibilidad(turno.getDisponibilidad());
 		return turnoRepo.save(turnoBuscado);
 	}
 
@@ -47,13 +47,15 @@ public class TurnoService {
 
 	public boolean hayTurnoDisponible(Medico medico, LocalDate fecha, LocalTime hora) {
 		Optional<Medico> medicoBuscado = medicoRepo.findById(medico.getId_medico());
-		
+
 		if (medicoBuscado.isPresent()) {
 			List<Turno> turnosDelMedico = medicoBuscado.get().getTurnos_disponibles();
 			for (Turno turno : turnosDelMedico) {
-				if (turno.getFecha_turno().equals(fecha)) {
-					if (turno.getHora_turno().equals(hora)) {
-						return true;
+				if (turno.getDisponibilidad()) {
+					if (turno.getFecha_turno().equals(fecha)) {
+						if (turno.getHora_turno().equals(hora)) {
+							return true;
+						}
 					}
 				}
 			}
@@ -61,6 +63,24 @@ public class TurnoService {
 			throw new IllegalArgumentException("El médico ingresado no existe");
 		}
 		return false;
+	}
+
+	public Turno buscarTurnoPorFecha(Medico medico, LocalDate fecha, LocalTime hora) {
+		Optional<Medico> medicoBuscado = medicoRepo.findById(medico.getId_medico());
+
+		if (medicoBuscado.isPresent()) {
+			List<Turno> turnosDelMedico = medicoBuscado.get().getTurnos_disponibles();
+			for (Turno turno : turnosDelMedico) {
+				if (turno.getDisponibilidad()) {
+					if (turno.getFecha_turno().equals(fecha)) {
+						if (turno.getHora_turno().equals(hora)) {
+							return turno;
+						}
+					}
+				}
+			}
+		} 
+		return null;
 	}
 
 }
