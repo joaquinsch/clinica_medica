@@ -41,7 +41,7 @@ public class ConsultaMedicaService {
 		 */
 		Turno turnoBuscado = turnoService.buscarTurnoPorFecha(consulta.getUn_medico(), consulta.getFecha_consulta(),
 				consulta.getHora_consulta());
-		if (turnoBuscado == null || turnoBuscado.getDisponibilidad() == false) {
+		if (turnoBuscado == null || !turnoBuscado.getDisponibilidad()) {
 			throw new TurnoNoDisponibleError("No hay turnos disponibles en el horario o fecha elegidos");
 		}
 

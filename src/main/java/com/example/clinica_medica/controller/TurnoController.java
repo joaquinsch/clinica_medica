@@ -32,13 +32,9 @@ public class TurnoController {
 
 
     @PostMapping("/crear")
-    public ResponseEntity<?> crearTurno(@RequestBody Turno turno) {
-        try {
-            Turno turnoGuardado = turnoService.guardarTurno(turno);
-            return ResponseEntity.status(HttpStatus.CREATED).body(turnoGuardado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
-        }
+    public ResponseEntity<Turno> crearTurno(@RequestBody Turno turno) {
+    	Turno turnoGuardado = turnoService.guardarTurno(turno);
+    	return new ResponseEntity<>(turnoGuardado,HttpStatus.CREATED);
     }
    
     @GetMapping("/buscar/{id_turno}")

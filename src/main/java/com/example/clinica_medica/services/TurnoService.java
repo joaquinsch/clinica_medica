@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.clinica_medica.exception.TurnoNoDisponibleError;
 import com.example.clinica_medica.model.Medico;
 import com.example.clinica_medica.model.Turno;
 import com.example.clinica_medica.repository.TurnoRepository;
@@ -20,6 +21,14 @@ public class TurnoService {
 	private MedicoService medicoService;
 
 	public Turno guardarTurno(Turno turno) {
+		List<Turno> turnosDelMedico = medicoService.buscarMedico(turno.getUn_medico().getId_medico()).getTurnos_disponibles();
+		for (Turno turnoDelMedico : turnosDelMedico) {
+			if (turnoDelMedico.getFecha_turno().equals(turno.getFecha_turno())) {
+				if (turnoDelMedico.getHora_turno().equals(turno.getHora_turno())) {
+					throw new TurnoNoDisponibleError("El médico ya tiene un turno en la fecha y horario ingresados");
+				}
+			}
+		}
 		return turnoRepo.save(turno);
 	}
 
