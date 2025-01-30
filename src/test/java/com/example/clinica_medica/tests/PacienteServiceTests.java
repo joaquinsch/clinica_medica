@@ -2,7 +2,6 @@ package com.example.clinica_medica.tests;
 
 import static org.mockito.Mockito.times;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;

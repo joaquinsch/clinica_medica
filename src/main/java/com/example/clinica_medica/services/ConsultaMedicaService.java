@@ -33,48 +33,34 @@ public class ConsultaMedicaService {
 	private PacienteService pacienteService;
 
 	public ConsultaMedica guardarConsultaMedica(ConsultaMedica consulta) {
-		/*
-		 * if (!turnoService.hayTurnoDisponible(consulta.getUn_medico(),
-		 * consulta.getFecha_consulta(), consulta.getHora_consulta())) { throw new
-		 * TurnoNoDisponibleError("No hay turnos disponibles en el horario o fecha elegidos"
-		 * ); }
-		 */
 		Turno turnoBuscado = turnoService.buscarTurnoPorFecha(consulta.getUn_medico(), consulta.getFecha_consulta(),
 				consulta.getHora_consulta());
 		if (turnoBuscado == null || !turnoBuscado.getDisponibilidad()) {
 			throw new TurnoNoDisponibleError("No hay turnos disponibles en el horario o fecha elegidos");
 		}
 
-		if (consulta.getUn_servicio_medico() == null ^ consulta.getUn_paquete_servicio() == null) {
-			// pide por servicio
-			if (consulta.getUn_servicio_medico() != null) {
-				ServicioMedico servicioMedico = servicioMedicoService
-						.buscarServicioMedico(consulta.getUn_servicio_medico().getCodigo_servicio());
-				consulta.setMonto_total(servicioMedico.getPrecio());
-			} else {
-				// pide por paquete
-				PaqueteServicio paqueteServicio = paqueteService
-						.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
-				// si tiene obra social aplica descuento de 20%
-				if (pacienteService.buscarPaciente(consulta.getUn_paciente().getId_paciente()).getTiene_obra_social()) {
-					Double precioFinal = paqueteServicio.obtenerPrecioConDescuento(paqueteServicio.getPrecio_paquete(),
-							DESCUENTO_OBRA_SOCIAL);
-					paqueteServicio.setPrecio_paquete(precioFinal);
-				}
-				consulta.setMonto_total(paqueteServicio.getPrecio_paquete());
+		if (consultaConPaquete(consulta)) {
+			PaqueteServicio paqueteServicio = paqueteService
+					.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
+			// si tiene obra social aplica descuento de 20%
+			if (pacienteService.buscarPaciente(consulta.getUn_paciente().getId_paciente()).getTiene_obra_social()) {
+				Double precioFinal = paqueteServicio.obtenerPrecioConDescuento(paqueteServicio.getPrecio_paquete(),
+						DESCUENTO_OBRA_SOCIAL);
+				paqueteServicio.setPrecio_paquete(precioFinal);
 			}
-			/*
-			 * ESTO GUARDA BIEN LA DISPONIBILIDAD, SIN TENER QUE LLAMAR AL REPO DE TURNO Y
-			 * GUARDARLO... (NO SE POR Q)
-			 */
-			turnoBuscado.setDisponibilidad(false);
-
-			return consultaMedicaRepo.save(consulta);
+			consulta.setMonto_total(paqueteServicio.getPrecio_paquete());
 		} else {
-			throw new ConsultaMedicaConServicioYPaqueteError(
-					"La consulta debe estar asociada a un único servicio médico o a un único paquete");
+			ServicioMedico servicioMedico = servicioMedicoService
+					.buscarServicioMedico(consulta.getUn_servicio_medico().getCodigo_servicio());
+			consulta.setMonto_total(servicioMedico.getPrecio());
 		}
+		/*
+		 * ESTO GUARDA BIEN LA DISPONIBILIDAD, SIN TENER QUE LLAMAR AL REPO DE TURNO Y
+		 * GUARDARLO... (NO SE POR Q)
+		 */
+		turnoBuscado.setDisponibilidad(false);
 
+		return consultaMedicaRepo.save(consulta);
 	}
 
 	public ConsultaMedica buscarConsultaMedica(Long id_consulta) {
@@ -96,7 +82,7 @@ public class ConsultaMedicaService {
 		}
 		consultaMedica.setUn_paciente(consulta.getUn_paciente());
 		consultaMedica.setUn_medico(consulta.getUn_medico());
-		
+
 		consultaMedica.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
 		consultaMedica.setUn_servicio_medico(consulta.getUn_servicio_medico());
 		consultaMedica.setMonto_total(consulta.getMonto_total());
@@ -113,6 +99,25 @@ public class ConsultaMedicaService {
 		consultaMedicaRepo.deleteById(id_consulta);
 		turnoBuscado.setDisponibilidad(true);
 		turnoService.guardarTurno(turnoBuscado);
+	}
+
+	/**
+	 * VALIDA QUE SOLO SEA DE UN TIPO
+	 * 
+	 * @return false si es por servicio medico / true si es por paquete.
+	 * @throws ConsultaMedicaConServicioYPaqueteError si la consulta tiene los dos tipos
+	 * 
+	 */
+	private boolean consultaConPaquete(ConsultaMedica consulta) {
+		if (consulta.getUn_servicio_medico() == null ^ consulta.getUn_paquete_servicio() == null) {
+			if (consulta.getUn_paquete_servicio() == null) {
+				return false;
+			}
+		} else {
+			throw new ConsultaMedicaConServicioYPaqueteError(
+					"La consulta debe estar asociada a un único servicio médico o a un único paquete");
+		}
+		return true;
 	}
 
 }
