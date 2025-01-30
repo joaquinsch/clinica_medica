@@ -63,9 +63,11 @@ public class ConsultaMedicaService {
 				}
 				consulta.setMonto_total(paqueteServicio.getPrecio_paquete());
 			}
-			// ESTO GUARDA BIEN LA DISPONIBILIDAD, SIN TENER QUE
-			// LLAMAR AL REPO DE TURNO Y GUARDARLO... (NO SE POR Q)
-			turnoBuscado.setDisponibilidad(false); 
+			/*
+			 * ESTO GUARDA BIEN LA DISPONIBILIDAD, SIN TENER QUE LLAMAR AL REPO DE TURNO Y
+			 * GUARDARLO... (NO SE POR Q)
+			 */
+			turnoBuscado.setDisponibilidad(false);
 
 			return consultaMedicaRepo.save(consulta);
 		} else {
@@ -94,11 +96,12 @@ public class ConsultaMedicaService {
 		}
 		consultaMedica.setUn_paciente(consulta.getUn_paciente());
 		consultaMedica.setUn_medico(consulta.getUn_medico());
+		
 		consultaMedica.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
 		consultaMedica.setUn_servicio_medico(consulta.getUn_servicio_medico());
 		consultaMedica.setMonto_total(consulta.getMonto_total());
 		consultaMedica.setPagado_o_no(consulta.getPagado_o_no());
-		
+
 		return consultaMedicaRepo.save(consultaMedica);
 	}
 

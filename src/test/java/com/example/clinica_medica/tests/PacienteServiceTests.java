@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.example.clinica_medica.exception.PacienteNoEncontradoError;
 import com.example.clinica_medica.model.Paciente;
 import com.example.clinica_medica.repository.PacienteRepository;
 import com.example.clinica_medica.services.PacienteService;
@@ -73,7 +74,7 @@ public class PacienteServiceTests {
 		paciente.setNombre("carlos");
 		Mockito.when(pacienteRepo.findById(2L)).thenReturn(Optional.empty());
 
-		Assertions.assertThrows(NoSuchElementException.class, () -> {
+		Assertions.assertThrows(PacienteNoEncontradoError.class, () -> {
 		        pacienteService.buscarPaciente(2L);
 		   });
 	}
@@ -85,7 +86,7 @@ public class PacienteServiceTests {
 		paciente.setNombre("carlos");
 		Mockito.when(pacienteRepo.findById(2L)).thenReturn(Optional.empty());
 
-		Assertions.assertThrows(NoSuchElementException.class, () -> {
+		Assertions.assertThrows(PacienteNoEncontradoError.class, () -> {
 		        pacienteService.editarPaciente(paciente);
 		   });
 	}
@@ -96,9 +97,10 @@ public class PacienteServiceTests {
 		paciente.setId_paciente(1L);
 		paciente.setNombre("carlos");
 		
+		Mockito.when(pacienteRepo.findById(1L)).thenReturn(Optional.of(paciente));
 		pacienteService.eliminarPaciente(paciente.getId_paciente());
 		
 		Mockito.verify(pacienteRepo, times(1)).deleteById(paciente.getId_paciente());
-		
+		Assertions.assertEquals(0, pacienteRepo.count());
 	}
 }
