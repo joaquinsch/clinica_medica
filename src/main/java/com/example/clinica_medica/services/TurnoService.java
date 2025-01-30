@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.clinica_medica.exception.TurnoNoDisponibleError;
+import com.example.clinica_medica.exception.TurnoNoEncontradoError;
 import com.example.clinica_medica.model.Medico;
 import com.example.clinica_medica.model.Turno;
 import com.example.clinica_medica.repository.TurnoRepository;
@@ -32,7 +33,8 @@ public class TurnoService {
 	}
 
 	public Turno buscarTurno(Long id_turno) {
-		return turnoRepo.findById(id_turno).orElseThrow();
+		return turnoRepo.findById(id_turno).orElseThrow(
+				() -> new TurnoNoEncontradoError("El turno con id: " + id_turno + " no existe"));
 	}
 
 	public Turno editarMedico(Turno turno) {
@@ -51,16 +53,6 @@ public class TurnoService {
 		turnoRepo.deleteById(id_turno);
 	}
 
-	/*
-	 * public boolean hayTurnoDisponible(Medico medico, LocalDate fecha, LocalTime
-	 * hora) {
-	 * 
-	 * Medico medicoBuscado = medicoService.buscarMedico(medico.getId_medico());
-	 * List<Turno> turnosDelMedico = medicoBuscado.getTurnos_disponibles(); for
-	 * (Turno turno : turnosDelMedico) { if (turno.getDisponibilidad()) { if
-	 * (turno.getFecha_turno().equals(fecha)) { if
-	 * (turno.getHora_turno().equals(hora)) { return true; } } } } return false; }
-	 */
 
 	public Turno buscarTurnoPorFecha(Medico medico, LocalDate fecha, LocalTime hora) {
 		Medico medicoBuscado = medicoService.buscarMedico(medico.getId_medico());
@@ -70,11 +62,6 @@ public class TurnoService {
 			if (coincidenFechaYHorario(turno, fecha, hora)) {
 				return turno;
 			}
-			/*if (turno.getFecha_turno().equals(fecha)) {
-				if (turno.getHora_turno().equals(hora)) {
-					return turno;
-				}
-			}*/
 		}
 
 		return null;

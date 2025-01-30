@@ -34,5 +34,12 @@ public class ApiExceptionHandler {
 		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 
 	}
+	
+	@ExceptionHandler(value = { TurnoNoEncontradoError.class })
+	public ResponseEntity<ApiError> handleConsultaMedicaConServicioYPaqueteError(TurnoNoEncontradoError e) {
+		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+
+	}
 
 }
