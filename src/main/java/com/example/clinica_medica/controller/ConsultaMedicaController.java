@@ -23,6 +23,7 @@ public class ConsultaMedicaController {
 	/* 
 	 * - (hecho)VERIFICAR QUE SI UN TURNO YA FUE USADO, NO PUEDA VOLVER A USARSE. 
 	 * - (hecho)VERIFICAR FECHA Y HORA DE TURNO AL EDITAR CONSULTA MEDICA, DEBE HABER PARA EL TURNO INGRESADO.
+	 * - VERIFICAR TURNO QUE NO HAYA TURNOS CON MISMA FECHA Y HORA.
 	 * - VERIFICAR QUE SI SE EDITA CONSULTA MEDICA PASANDOLE SERVICIO Y PAQUETE DE ERROR.
 	 * - VERIFICAR QUE SI SE QUIERE EDITAR EL CODIGO_PAQUETE, SEA UN PAQUETE EXISTENTE, Y QUE NO 
 	 * ESTÉ ASOCIADO A OTRA CONSULTA MEDICA.
@@ -31,7 +32,7 @@ public class ConsultaMedicaController {
 	 *  - VERIFICAR QUE SI SE QUIERE EDITAR ID-PACIENTE, EXISTA EL PACIENTE
 	 *  - VERIFICAR RECURSIVIDAD INFINITA EN ENDPOINTS GETS
 	 * -----------------------------------------------------------
-	 * - VERIFICAR TURNO AL ELIMINAR CONSULTA MEDICA, DEBE REESTABLECERSE EL TURNO.
+	 * - (hecho)VERIFICAR TURNO AL ELIMINAR CONSULTA MEDICA, DEBE REESTABLECERSE EL TURNO.
 	 * - VERIFICAR QUE SI SE ELIMINA CONSULTA MEDICA, DEBE ELIMINARSE EL PAQUETE ASOCIADO A ELLA.
 	 * -----------------------------------------------------------------
 	 * - REFACTOREAR HAYTURNODISPONIBLE PARA Q LLAME A SERVICES SOLO
@@ -55,7 +56,6 @@ public class ConsultaMedicaController {
 
 	@PostMapping("/crear")
 	public ResponseEntity<ConsultaMedica> crearConsultaMedica(@RequestBody ConsultaMedica consulta) {
-		
 		consultaMedicaService.guardarConsultaMedica(consulta);
 		return ResponseEntity.status(HttpStatus.CREATED).body(consulta);
 	}
