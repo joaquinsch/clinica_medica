@@ -21,12 +21,11 @@ public class TurnoService {
 	private MedicoService medicoService;
 
 	public Turno guardarTurno(Turno turno) {
-		List<Turno> turnosDelMedico = medicoService.buscarMedico(turno.getUn_medico().getId_medico()).getTurnos_disponibles();
+		List<Turno> turnosDelMedico = medicoService.buscarMedico(turno.getUn_medico().getId_medico())
+				.getTurnos_disponibles();
 		for (Turno turnoDelMedico : turnosDelMedico) {
-			if (turnoDelMedico.getFecha_turno().equals(turno.getFecha_turno())) {
-				if (turnoDelMedico.getHora_turno().equals(turno.getHora_turno())) {
-					throw new TurnoNoDisponibleError("El médico ya tiene un turno en la fecha y horario ingresados");
-				}
+			if (coincidenFechaYHorario(turno, turnoDelMedico.getFecha_turno(), turnoDelMedico.getHora_turno())) {
+				throw new TurnoNoDisponibleError("El médico ya tiene un turno en la fecha y horario ingresados");
 			}
 		}
 		return turnoRepo.save(turno);
@@ -68,15 +67,21 @@ public class TurnoService {
 
 		List<Turno> turnosDelMedico = medicoBuscado.getTurnos_disponibles();
 		for (Turno turno : turnosDelMedico) {
-			if (turno.getFecha_turno().equals(fecha)) {
+			if (coincidenFechaYHorario(turno, fecha, hora)) {
+				return turno;
+			}
+			/*if (turno.getFecha_turno().equals(fecha)) {
 				if (turno.getHora_turno().equals(hora)) {
 					return turno;
 				}
-			}
-
+			}*/
 		}
 
 		return null;
+	}
+
+	private boolean coincidenFechaYHorario(Turno turno, LocalDate fecha, LocalTime horario) {
+		return turno.getFecha_turno().equals(fecha) && turno.getHora_turno().equals(horario);
 	}
 
 }
