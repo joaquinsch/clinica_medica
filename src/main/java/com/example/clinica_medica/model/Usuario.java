@@ -26,4 +26,8 @@ public class Usuario {
 	private String email;
 	private String telefono;
 	private String direccion;
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
 }

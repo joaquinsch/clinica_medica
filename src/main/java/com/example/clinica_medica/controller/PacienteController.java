@@ -21,7 +21,6 @@ public class PacienteController {
 
 	@Autowired
 	private PacienteService pacienteService;
-	// private ObjectMapper objectMapper;
 
 	@PostMapping("/crear")
 	public ResponseEntity<Paciente> crearPaciente(@RequestBody Paciente paciente) {

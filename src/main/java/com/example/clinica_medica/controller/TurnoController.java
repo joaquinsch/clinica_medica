@@ -50,7 +50,7 @@ public class TurnoController {
     @PutMapping("/editar")
     public ResponseEntity<?> editarTurno(@RequestBody Turno turno) {
         try {
-            Turno turnoEditado = turnoService.editarMedico(turno);
+            Turno turnoEditado = turnoService.editarTurno(turno);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(turnoEditado);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el turno");

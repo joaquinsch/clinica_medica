@@ -37,7 +37,7 @@ public class TurnoService {
 				() -> new TurnoNoEncontradoError("El turno con id: " + id_turno + " no existe"));
 	}
 
-	public Turno editarMedico(Turno turno) {
+	public Turno editarTurno(Turno turno) {
 		Turno turnoBuscado = buscarTurno(turno.getId_turno());
 
 		turnoBuscado.setFecha_turno(turno.getFecha_turno());
@@ -67,7 +67,7 @@ public class TurnoService {
 		return null;
 	}
 
-	private boolean coincidenFechaYHorario(Turno turno, LocalDate fecha, LocalTime horario) {
+	public boolean coincidenFechaYHorario(Turno turno, LocalDate fecha, LocalTime horario) {
 		return turno.getFecha_turno().equals(fecha) && turno.getHora_turno().equals(horario);
 	}
 

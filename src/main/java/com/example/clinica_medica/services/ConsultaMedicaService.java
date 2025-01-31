@@ -74,7 +74,8 @@ public class ConsultaMedicaService {
 		consultaMedica.setId_consulta_medica(consulta.getId_consulta_medica());
 		Turno turnoBuscado = turnoService.buscarTurnoPorFecha(consulta.getUn_medico(), consulta.getFecha_consulta(),
 				consulta.getHora_consulta());
-		if (turnoBuscado != null && turnoBuscado.getDisponibilidad()) {
+		// si existe el turno y está disponible, o si deja el mismo turno que ya estaba
+		if (turnoBuscado != null && turnoBuscado.getDisponibilidad() || turnoService.coincidenFechaYHorario(turnoBuscado, consulta.getFecha_consulta(), consulta.getHora_consulta())) {
 			consultaMedica.setFecha_consulta(consulta.getFecha_consulta());
 			consultaMedica.setHora_consulta(consulta.getHora_consulta());
 		} else {
@@ -82,9 +83,11 @@ public class ConsultaMedicaService {
 		}
 		consultaMedica.setUn_paciente(consulta.getUn_paciente());
 		consultaMedica.setUn_medico(consulta.getUn_medico());
-
-		consultaMedica.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
-		consultaMedica.setUn_servicio_medico(consulta.getUn_servicio_medico());
+		if (consultaConPaquete(consulta)) {
+			consultaMedica.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
+		} else {
+			consultaMedica.setUn_servicio_medico(consulta.getUn_servicio_medico());
+		}
 		consultaMedica.setMonto_total(consulta.getMonto_total());
 		consultaMedica.setPagado_o_no(consulta.getPagado_o_no());
 
@@ -105,7 +108,8 @@ public class ConsultaMedicaService {
 	 * VALIDA QUE SOLO SEA DE UN TIPO
 	 * 
 	 * @return false si es por servicio medico / true si es por paquete.
-	 * @throws ConsultaMedicaConServicioYPaqueteError si la consulta tiene los dos tipos
+	 * @throws ConsultaMedicaConServicioYPaqueteError si la consulta tiene los dos
+	 *                                                tipos
 	 * 
 	 */
 	private boolean consultaConPaquete(ConsultaMedica consulta) {
