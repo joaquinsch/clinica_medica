@@ -27,19 +27,26 @@ public class ApiExceptionHandler {
 		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 
 	}
-	
+
 	@ExceptionHandler(value = { ConsultaMedicaConServicioYPaqueteError.class })
-	public ResponseEntity<ApiError> handleConsultaMedicaConServicioYPaqueteError(ConsultaMedicaConServicioYPaqueteError e) {
+	public ResponseEntity<ApiError> handleConsultaMedicaConServicioYPaqueteError(
+			ConsultaMedicaConServicioYPaqueteError e) {
 		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 
 	}
-	
+
 	@ExceptionHandler(value = { TurnoNoEncontradoError.class })
 	public ResponseEntity<ApiError> handleConsultaMedicaConServicioYPaqueteError(TurnoNoEncontradoError e) {
 		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
 		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
 
+	}
+
+	@ExceptionHandler(value = { PaqueteNoEncontradoError.class })
+	public ResponseEntity<ApiError> handlePaqueteNoEncontradoError(PaqueteNoEncontradoError e) {
+		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
 	}
 
 }

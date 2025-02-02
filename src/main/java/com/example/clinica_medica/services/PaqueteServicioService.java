@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.clinica_medica.exception.PaqueteNoEncontradoError;
 import com.example.clinica_medica.model.PaqueteServicio;
 import com.example.clinica_medica.model.ServicioMedico;
 import com.example.clinica_medica.repository.PaqueteServicioRepository;
@@ -48,7 +49,8 @@ public class PaqueteServicioService {
 	}
 
 	public PaqueteServicio buscarPaqueteServicio(Long id_paquete) {
-		return paqueteServicioRepo.findById(id_paquete).orElseThrow();
+		return paqueteServicioRepo.findById(id_paquete).orElseThrow(
+				() -> new PaqueteNoEncontradoError("El paquete con id: " + id_paquete + " no fue encontrado"));
 	}
 
 	public PaqueteServicio editarPaqueteServicio(PaqueteServicio paqueteServicio) {
@@ -63,6 +65,5 @@ public class PaqueteServicioService {
 		PaqueteServicio paquete = buscarPaqueteServicio(id_paquete);
 		paqueteServicioRepo.delete(paquete);
 	}
-
 
 }
