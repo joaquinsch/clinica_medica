@@ -84,6 +84,11 @@ public class ConsultaMedicaService {
 		consultaMedica.setUn_paciente(consulta.getUn_paciente());
 		consultaMedica.setUn_medico(consulta.getUn_medico());
 		if (consultaConPaquete(consulta)) {
+			/*
+			 * todo esto valida que se pueda editar el codigo_paquete si la consulta ya era por paquete,
+			 * pero todavia faltan los casos en que se quiere editar codigo_paquete y
+			 * cambiarlo a un codigo_servicio, o al reves.
+			 */
 			PaqueteServicio paqueteBuscado = this.paqueteService.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
 			for (ConsultaMedica unaConsulta : this.consultaMedicaRepo.findAll()) {
 				if (unaConsulta.getUn_paquete_servicio() != null) {
@@ -96,6 +101,12 @@ public class ConsultaMedicaService {
 			}
 			consultaMedica.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
 		} else {
+			/*
+			 * lo mismo para esto
+			 */
+			@SuppressWarnings("unused")
+			ServicioMedico servicioMedicoBuscado = this.servicioMedicoService.buscarServicioMedico(consulta.getUn_servicio_medico().getCodigo_servicio());
+
 			consultaMedica.setUn_servicio_medico(consulta.getUn_servicio_medico());
 		}
 		consultaMedica.setMonto_total(consulta.getMonto_total());
@@ -133,5 +144,6 @@ public class ConsultaMedicaService {
 		}
 		return true;
 	}
+
 
 }

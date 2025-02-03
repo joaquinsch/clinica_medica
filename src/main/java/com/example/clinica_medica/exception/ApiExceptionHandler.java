@@ -48,5 +48,11 @@ public class ApiExceptionHandler {
 		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
 		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(value = { ServicioMedicoNoEncontradoError.class })
+	public ResponseEntity<ApiError> handleServicioMedicoNoEncontradoError(ServicioMedicoNoEncontradoError e) {
+		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+	}
 
 }
