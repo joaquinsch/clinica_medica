@@ -84,6 +84,16 @@ public class ConsultaMedicaService {
 		consultaMedica.setUn_paciente(consulta.getUn_paciente());
 		consultaMedica.setUn_medico(consulta.getUn_medico());
 		if (consultaConPaquete(consulta)) {
+			PaqueteServicio paqueteBuscado = this.paqueteService.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
+			for (ConsultaMedica unaConsulta : this.consultaMedicaRepo.findAll()) {
+				if (unaConsulta.getUn_paquete_servicio() != null) {
+					if (unaConsulta.getUn_paquete_servicio().getCodigo_paquete() == paqueteBuscado.getCodigo_paquete()) {
+						if (unaConsulta.getUn_paquete_servicio().getCodigo_paquete() != consultaMedica.getUn_paquete_servicio().getCodigo_paquete()) {
+							throw new IllegalArgumentException("El paquete elegido se encuentra asociado a otra consulta médica");
+						}
+					}
+				}
+			}
 			consultaMedica.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
 		} else {
 			consultaMedica.setUn_servicio_medico(consulta.getUn_servicio_medico());
