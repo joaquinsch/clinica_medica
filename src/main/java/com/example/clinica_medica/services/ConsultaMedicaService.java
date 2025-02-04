@@ -11,6 +11,7 @@ import com.example.clinica_medica.model.PaqueteServicio;
 import com.example.clinica_medica.model.ServicioMedico;
 import com.example.clinica_medica.model.Turno;
 import com.example.clinica_medica.repository.ConsultaMedicaRepository;
+import com.example.clinica_medica.repository.TurnoRepository;
 
 @Service
 public class ConsultaMedicaService {
@@ -19,6 +20,9 @@ public class ConsultaMedicaService {
 
 	@Autowired
 	private ConsultaMedicaRepository consultaMedicaRepo;
+
+	@Autowired
+	private TurnoRepository turnoRepo;
 
 	@Autowired
 	private TurnoService turnoService;
@@ -70,49 +74,39 @@ public class ConsultaMedicaService {
 	}
 
 	public ConsultaMedica editarConsultaMedica(ConsultaMedica consulta) {
-		ConsultaMedica consultaMedica = buscarConsultaMedica(consulta.getId_consulta_medica());
-		consultaMedica.setId_consulta_medica(consulta.getId_consulta_medica());
-		Turno turnoBuscado = turnoService.buscarTurnoPorFecha(consulta.getUn_medico(), consulta.getFecha_consulta(),
-				consulta.getHora_consulta());
-		// si existe el turno y está disponible, o si deja el mismo turno que ya estaba
-		if (turnoBuscado != null && turnoBuscado.getDisponibilidad() || turnoService.coincidenFechaYHorario(turnoBuscado, consulta.getFecha_consulta(), consulta.getHora_consulta())) {
-			consultaMedica.setFecha_consulta(consulta.getFecha_consulta());
-			consultaMedica.setHora_consulta(consulta.getHora_consulta());
-		} else {
-			throw new TurnoNoDisponibleError("No hay turnos disponibles en el horario o fecha elegidos");
-		}
-		consultaMedica.setUn_paciente(consulta.getUn_paciente());
-		consultaMedica.setUn_medico(consulta.getUn_medico());
+		ConsultaMedica consultaRecuperada = buscarConsultaMedica(consulta.getId_consulta_medica());
+		consultaRecuperada.setId_consulta_medica(consulta.getId_consulta_medica());
+		editarTurno(consultaRecuperada, consulta);
+		consultaRecuperada.setUn_paciente(consulta.getUn_paciente());
+		consultaRecuperada.setUn_medico(consulta.getUn_medico());
 		if (consultaConPaquete(consulta)) {
 			/*
-			 * todo esto valida que se pueda editar el codigo_paquete si la consulta ya era por paquete,
-			 * pero todavia faltan los casos en que se quiere editar codigo_paquete y
-			 * cambiarlo a un codigo_servicio, o al reves.
+			 * todo esto valida que se pueda editar el codigo_paquete si la consulta ya era
+			 * por paquete, pero todavia faltan los casos en que se quiere editar
+			 * codigo_paquete y cambiarlo a un codigo_servicio, o al reves.
 			 */
-			PaqueteServicio paqueteBuscado = this.paqueteService.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
-			for (ConsultaMedica unaConsulta : this.consultaMedicaRepo.findAll()) {
-				if (unaConsulta.getUn_paquete_servicio() != null) {
-					if (unaConsulta.getUn_paquete_servicio().getCodigo_paquete() == paqueteBuscado.getCodigo_paquete()) {
-						if (unaConsulta.getUn_paquete_servicio().getCodigo_paquete() != consultaMedica.getUn_paquete_servicio().getCodigo_paquete()) {
-							throw new IllegalArgumentException("El paquete elegido se encuentra asociado a otra consulta médica");
-						}
-					}
-				}
+			PaqueteServicio paqueteBuscado = paqueteService
+					.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
+
+			if (paqueteValido(paqueteBuscado, consultaRecuperada)) {
+				consultaRecuperada.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
+			} else {
+				throw new IllegalArgumentException("El paquete ya se encuentra asociado a otra consulta médica");
 			}
-			consultaMedica.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
 		} else {
 			/*
 			 * lo mismo para esto
 			 */
 			@SuppressWarnings("unused")
-			ServicioMedico servicioMedicoBuscado = this.servicioMedicoService.buscarServicioMedico(consulta.getUn_servicio_medico().getCodigo_servicio());
+			ServicioMedico servicioMedicoBuscado = servicioMedicoService
+					.buscarServicioMedico(consulta.getUn_servicio_medico().getCodigo_servicio());
 
-			consultaMedica.setUn_servicio_medico(consulta.getUn_servicio_medico());
+			consultaRecuperada.setUn_servicio_medico(consulta.getUn_servicio_medico());
 		}
-		consultaMedica.setMonto_total(consulta.getMonto_total());
-		consultaMedica.setPagado_o_no(consulta.getPagado_o_no());
+		consultaRecuperada.setMonto_total(consulta.getMonto_total());
+		consultaRecuperada.setPagado_o_no(consulta.getPagado_o_no());
 
-		return consultaMedicaRepo.save(consultaMedica);
+		return consultaMedicaRepo.save(consultaRecuperada);
 	}
 
 	public void eliminarConsultaMedica(Long id_consulta) {
@@ -145,5 +139,51 @@ public class ConsultaMedicaService {
 		return true;
 	}
 
+	/**
+	 * Valida que al editar codigo_paquete, no haya otra consulta que ya tenga ese
+	 * codigo_paquete asociado.
+	 */
+	private boolean paqueteValido(PaqueteServicio paquete, ConsultaMedica consulta) {
+		for (ConsultaMedica unaConsulta : this.consultaMedicaRepo.findAll()) {
+			if (unaConsulta.getUn_paquete_servicio() != null) {
+				if (unaConsulta.getUn_paquete_servicio().getCodigo_paquete() == paquete.getCodigo_paquete()) {
+					if (unaConsulta.getUn_paquete_servicio().getCodigo_paquete() != consulta.getUn_paquete_servicio()
+							.getCodigo_paquete()) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	/**
+	 * valida si el turno de la consulta se quiere editar, o se deja el que
+	 * ya tiene, si no hay turnos en la fecha y hora ingresadas tira error.
+	 * @param original
+	 * @param nueva
+	 * @throws TurnoNoDisponibleError
+	 */
+
+	private void editarTurno(ConsultaMedica original, ConsultaMedica nueva) {
+		Turno turnoOriginal = turnoService.buscarTurnoPorFecha(original.getUn_medico(), original.getFecha_consulta(),
+				original.getHora_consulta());
+		Turno turnoIngresado = turnoService.buscarTurnoPorFecha(nueva.getUn_medico(), nueva.getFecha_consulta(),
+				nueva.getHora_consulta());
+		// si existe el turno y está disponible, o si deja el mismo turno que ya estaba
+		if (turnoIngresado != null && turnoIngresado.getDisponibilidad()) {
+			original.setFecha_consulta(nueva.getFecha_consulta());
+			original.setHora_consulta(nueva.getHora_consulta());
+			turnoIngresado.setDisponibilidad(false);
+			turnoRepo.save(turnoIngresado);
+			turnoOriginal.setDisponibilidad(true);
+			turnoRepo.save(turnoOriginal);
+		} else if (turnoIngresado != null && turnoService.coincidenFechaYHorario(turnoIngresado,
+				nueva.getFecha_consulta(), nueva.getHora_consulta())) {
+			original.setFecha_consulta(nueva.getFecha_consulta());
+			original.setHora_consulta(nueva.getHora_consulta());
+		} else {
+			throw new TurnoNoDisponibleError("No hay turnos disponibles en el horario o fecha elegidos");
+		}
+	}
 
 }
