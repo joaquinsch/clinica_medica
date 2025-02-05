@@ -1,6 +1,5 @@
 package com.example.clinica_medica.tests;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -12,10 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.example.clinica_medica.controller.PacienteController;
@@ -56,7 +55,7 @@ public class PacienteControllerTests {
 	@Test
 	public void deberiaCrearUnPaciente() throws Exception{
 		Mockito.when(pacienteService.guardarPaciente(Mockito.any(Paciente.class))).thenReturn(paciente);
-		
+
 		String pacienteJson = objectMapper.writeValueAsString(paciente);
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/pacientes/crear")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -65,5 +64,19 @@ public class PacienteControllerTests {
 				.andExpect(jsonPath("$.id_paciente").value(1))
 				.andExpect(jsonPath("$.nombre").value("Juan"))
                 .andExpect(jsonPath("$.apellido").value("Pérez"));
+	}
+	
+	@Test
+	public void deberiaEliminarUnPaciente() throws Exception{
+		//Mockito.when(pacienteService.buscarPaciente(paciente.getId_paciente())).thenReturn(paciente);
+		//String pacienteJson = objectMapper.writeValueAsString(paciente);
+		
+		mockMvc.perform(MockMvcRequestBuilders.delete("/api/pacientes/eliminar/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				).andExpect(status().isNoContent());
+		
+		Mockito.verify(pacienteService, Mockito.times(1)).eliminarPaciente(paciente.getId_paciente());
+		
+		
 	}
 }
