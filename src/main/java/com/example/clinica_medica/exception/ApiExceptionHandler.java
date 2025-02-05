@@ -54,5 +54,11 @@ public class ApiExceptionHandler {
 		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
 		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(value = { PaqueteNoDisponibleError.class })
+	public ResponseEntity<ApiError> handlePaqueteNoDisponibleError(PaqueteNoDisponibleError e) {
+		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+	}
 
 }
