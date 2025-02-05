@@ -1,5 +1,6 @@
 package com.example.clinica_medica.tests;
 
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,8 +76,21 @@ public class PacienteControllerTests {
 				.contentType(MediaType.APPLICATION_JSON)
 				).andExpect(status().isNoContent());
 		
-		Mockito.verify(pacienteService, Mockito.times(1)).eliminarPaciente(paciente.getId_paciente());
+		Mockito.verify(pacienteService, times(1)).eliminarPaciente(paciente.getId_paciente());
+	}
+	
+	@Test
+	public void deberiaBuscarUnPaciente() throws Exception{
+		Mockito.when(pacienteService.buscarPaciente(paciente.getId_paciente())).thenReturn(paciente);
+		String pacienteJson = objectMapper.writeValueAsString(paciente);
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/pacientes/buscar/1")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(pacienteJson))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id_paciente").value(1L))
+				.andExpect(jsonPath("$.nombre").value("Juan"))
+				.andExpect(jsonPath("$.apellido").value("Pérez"));
 		
-		
+		Mockito.verify(pacienteService, times(1)).buscarPaciente(paciente.getId_paciente());
 	}
 }
