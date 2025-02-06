@@ -74,6 +74,10 @@ public class ConsultaMedicaService {
 
 	}
 
+	/**
+	 * edita la consulta, no actualiza el monto_total automaticamente
+	 * 
+	 */
 	public ConsultaMedica editarConsultaMedica(ConsultaMedica consulta) {
 		ConsultaMedica consultaRecuperada = buscarConsultaMedica(consulta.getId_consulta_medica());
 		consultaRecuperada.setId_consulta_medica(consulta.getId_consulta_medica());
@@ -85,14 +89,21 @@ public class ConsultaMedicaService {
 			PaqueteServicio paqueteBuscado = paqueteService
 					.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
 
-			if (paqueteValido(paqueteBuscado, consultaRecuperada)) {
-				if (!obtenerTipoDeConsulta(consultaRecuperada)) {
-					consultaRecuperada.setUn_servicio_medico(null);
+			// se quiere editar codigo_paquete
+			Long id_consultaConElPaqueteIngresado = obtenerIdDeConsultaConMismoPaquete(paqueteBuscado);
+			if (id_consultaConElPaqueteIngresado != consultaRecuperada.getId_consulta_medica()) {
+				// no hay otra consulta con asociada al codigo_paquete ingresado.
+				if (id_consultaConElPaqueteIngresado == -1L) {
+					if (!obtenerTipoDeConsulta(consultaRecuperada)) {
+						consultaRecuperada.setUn_servicio_medico(null);
+					}
+					consultaRecuperada.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
+				// el codigo_paquete ingresado ya está asociado a otra consulta
+				} else {
+					throw new PaqueteNoDisponibleError("El paquete ya se encuentra asociado a otra consulta médica");
 				}
-				consultaRecuperada.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
-			} else {
-				throw new PaqueteNoDisponibleError("El paquete ya se encuentra asociado a otra consulta médica");
 			}
+			consultaRecuperada.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
 		} else {
 			@SuppressWarnings("unused")
 			ServicioMedico servicioMedicoBuscado = servicioMedicoService
@@ -126,22 +137,19 @@ public class ConsultaMedicaService {
 	 * @throws ConsultaMedicaConServicioYPaqueteError si la consulta tiene los dos
 	 *                                                tipos
 	 */
-	
 
 	private boolean consultaConPaquete(ConsultaMedica consulta) {
 		if (consulta.getUn_servicio_medico() == null ^ consulta.getUn_paquete_servicio() == null) {
-			if (consulta.getUn_paquete_servicio() == null) {
-				return false;
-			}
+			return consulta.getUn_paquete_servicio() != null;
 		} else {
 			throw new ConsultaMedicaConServicioYPaqueteError(
 					"La consulta debe estar asociada a un único servicio médico o a un único paquete");
 		}
-		return true;
 	}
 
 	/**
 	 * NO VALIDA NADA
+	 * 
 	 * @return true si es por paquete, false si es por servicio medico.
 	 * 
 	 */
@@ -150,21 +158,22 @@ public class ConsultaMedicaService {
 	}
 
 	/**
-	 * Valida que al editar codigo_paquete, no haya otra consulta que ya tenga ese
-	 * codigo_paquete asociado.
+	 * Se fija si hay alguna consulta asociada al paquete ingresado.
+	 * @param
+	 * @return Si la encuentra, devuelve el id de esa consulta. Si no hay ninguna consulta
+	 * asociada al paquete ingresado, devuelve -1
+	 * 
 	 */
-	private boolean paqueteValido(PaqueteServicio paquete, ConsultaMedica consulta) {
+	private Long obtenerIdDeConsultaConMismoPaquete(PaqueteServicio paquete) {
 		for (ConsultaMedica unaConsulta : this.consultaMedicaRepo.findAll()) {
 			if (unaConsulta.getUn_paquete_servicio() != null) {
 				if (unaConsulta.getUn_paquete_servicio().getCodigo_paquete() == paquete.getCodigo_paquete()) {
-					if (unaConsulta.getUn_paquete_servicio().getCodigo_paquete() != consulta.getUn_paquete_servicio()
-							.getCodigo_paquete()) {
-						return false;
-					}
+					return unaConsulta.getId_consulta_medica();
+
 				}
 			}
 		}
-		return true;
+		return -1L;
 	}
 
 	/**
