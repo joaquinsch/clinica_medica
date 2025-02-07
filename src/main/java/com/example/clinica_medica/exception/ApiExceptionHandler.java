@@ -60,5 +60,11 @@ public class ApiExceptionHandler {
 		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(value = { MedicoNoEncontradoError.class })
+	public ResponseEntity<ApiError> handleMedicoNoEncontradoError(MedicoNoEncontradoError e) {
+		ApiError apiError = new ApiError(e.getMessage(), e.getCause(), HttpStatus.NOT_FOUND);
+		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+	}
 
 }

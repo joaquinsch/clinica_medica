@@ -8,6 +8,7 @@ import com.example.clinica_medica.exception.ConsultaMedicaNoEncontradaError;
 import com.example.clinica_medica.exception.PaqueteNoDisponibleError;
 import com.example.clinica_medica.exception.TurnoNoDisponibleError;
 import com.example.clinica_medica.model.ConsultaMedica;
+import com.example.clinica_medica.model.Medico;
 import com.example.clinica_medica.model.PaqueteServicio;
 import com.example.clinica_medica.model.ServicioMedico;
 import com.example.clinica_medica.model.Turno;
@@ -36,6 +37,9 @@ public class ConsultaMedicaService {
 
 	@Autowired
 	private PacienteService pacienteService;
+
+	@Autowired
+	private MedicoService medicoService;
 
 	public ConsultaMedica guardarConsultaMedica(ConsultaMedica consulta) {
 		Turno turnoBuscado = turnoService.buscarTurnoPorFecha(consulta.getUn_medico(), consulta.getFecha_consulta(),
@@ -83,8 +87,18 @@ public class ConsultaMedicaService {
 		consultaRecuperada.setId_consulta_medica(consulta.getId_consulta_medica());
 		editarTurno(consultaRecuperada, consulta);
 
+		pacienteService.buscarPaciente(consulta.getUn_paciente().getId_paciente());
 		consultaRecuperada.setUn_paciente(consulta.getUn_paciente());
+
+		Medico medicoBuscado = medicoService.buscarMedico(consulta.getUn_medico().getId_medico());
 		consultaRecuperada.setUn_medico(consulta.getUn_medico());
+		// si se editó el médico, reestablezco el turno del anterior
+		if (medicoBuscado.getId_medico() != consultaRecuperada.getUn_medico().getId_medico()) {
+			Turno turnoAnterior = turnoService.buscarTurnoPorFecha(medicoBuscado, consultaRecuperada.getFecha_consulta(), consultaRecuperada.getHora_consulta());
+			turnoAnterior.setDisponibilidad(true);
+			turnoRepo.save(turnoAnterior);
+		}
+		
 		if (consultaConPaquete(consulta)) {
 			PaqueteServicio paqueteBuscado = paqueteService
 					.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
@@ -98,16 +112,14 @@ public class ConsultaMedicaService {
 						consultaRecuperada.setUn_servicio_medico(null);
 					}
 					consultaRecuperada.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
-				// el codigo_paquete ingresado ya está asociado a otra consulta
+					// el codigo_paquete ingresado ya está asociado a otra consulta
 				} else {
 					throw new PaqueteNoDisponibleError("El paquete ya se encuentra asociado a otra consulta médica");
 				}
 			}
 			consultaRecuperada.setUn_paquete_servicio(consulta.getUn_paquete_servicio());
 		} else {
-			@SuppressWarnings("unused")
-			ServicioMedico servicioMedicoBuscado = servicioMedicoService
-					.buscarServicioMedico(consulta.getUn_servicio_medico().getCodigo_servicio());
+			servicioMedicoService.buscarServicioMedico(consulta.getUn_servicio_medico().getCodigo_servicio());
 			if (obtenerTipoDeConsulta(consultaRecuperada)) {
 				consultaRecuperada.setUn_paquete_servicio(null);
 			}
@@ -159,9 +171,10 @@ public class ConsultaMedicaService {
 
 	/**
 	 * Se fija si hay alguna consulta asociada al paquete ingresado.
+	 * 
 	 * @param
-	 * @return Si la encuentra, devuelve el id de esa consulta. Si no hay ninguna consulta
-	 * asociada al paquete ingresado, devuelve -1
+	 * @return Si la encuentra, devuelve el id de esa consulta. Si no hay ninguna
+	 *         consulta asociada al paquete ingresado, devuelve -1
 	 * 
 	 */
 	private Long obtenerIdDeConsultaConMismoPaquete(PaqueteServicio paquete) {

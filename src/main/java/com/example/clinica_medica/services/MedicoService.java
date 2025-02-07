@@ -3,6 +3,7 @@ package com.example.clinica_medica.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.clinica_medica.exception.MedicoNoEncontradoError;
 import com.example.clinica_medica.model.Medico;
 
 import com.example.clinica_medica.repository.MedicoRepository;
@@ -18,7 +19,8 @@ public class MedicoService {
 	}
 
 	public Medico buscarMedico(Long id_medico) {
-		return medicoRepo.findById(id_medico).orElseThrow();
+		return medicoRepo.findById(id_medico).orElseThrow(
+				() -> new MedicoNoEncontradoError("El médico con id: " + id_medico + " no existe"));
 
 	}
 
