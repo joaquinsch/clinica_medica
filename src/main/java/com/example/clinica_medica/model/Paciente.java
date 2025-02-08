@@ -2,6 +2,9 @@ package com.example.clinica_medica.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,7 +26,7 @@ public class Paciente extends Usuario {
 	
 	@NotNull(message = "Debes colocar si tiene obra social o no")
 	private Boolean tiene_obra_social;
-
+	@JsonBackReference
 	@OneToMany(mappedBy = "un_paciente")
 	private List<ConsultaMedica> consultas;
 	

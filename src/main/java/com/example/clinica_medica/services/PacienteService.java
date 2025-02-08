@@ -41,8 +41,7 @@ public class PacienteService {
 
 	public void eliminarPaciente(Long id_paciente) {
 		// busca el paciente, si no existe tira excepcion
-		@SuppressWarnings("unused")
-		Paciente paciente = buscarPaciente(id_paciente);
+		buscarPaciente(id_paciente);
 		pacienteRepo.deleteById(id_paciente);
 	}
 }

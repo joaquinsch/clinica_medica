@@ -2,6 +2,8 @@ package com.example.clinica_medica.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +33,7 @@ public class PaqueteServicio {
 	@JoinTable(name = "rel_paquete_serviciomedico", 
 		joinColumns = @JoinColumn(name = "codigo_paquete"), 
 		inverseJoinColumns = @JoinColumn(name = "codigo_servicio_medico"))
+	@JsonManagedReference
 	private List<ServicioMedico> lista_servicios_incluidos;
 	private String descripcion;
 	private Double precio_paquete;

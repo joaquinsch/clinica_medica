@@ -3,6 +3,8 @@ package com.example.clinica_medica.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,6 +40,7 @@ public class ConsultaMedica {
 	private LocalTime hora_consulta;
 	@ManyToOne
 	@JoinColumn(name = "id_paciente")
+	@JsonManagedReference
 	private Paciente un_paciente;
 	@ManyToOne
 	@JoinColumn(name = "id_medico")
@@ -50,11 +53,15 @@ public class ConsultaMedica {
 	  * SE ELIGE POR PAQUETE O POR SERVICIO MEDICO.
 	  * 
 	  */
+	
+	// ESTO NO TIENE LADO INVERSO (TENER CUIDADO)
 	@OneToOne
 	@JoinColumn(name = "codigo_paquete")
+	@JsonManagedReference
 	private PaqueteServicio un_paquete_servicio;
 	@ManyToOne
 	@JoinColumn(name = "codigo_servicio")
+	@JsonManagedReference
 	private ServicioMedico un_servicio_medico;
 
 	private Double monto_total;
