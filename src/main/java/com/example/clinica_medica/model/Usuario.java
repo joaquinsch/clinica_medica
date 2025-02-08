@@ -24,7 +24,7 @@ public class Usuario {
 	private String nombre;
 	@NotBlank(message = "El apellido no fué ingresado")
 	private String apellido;
-
+	@Pattern(message = "El DNI debe ser un número de 8 dígitos", regexp = "^\\d{8}$")
 	private String dni;
 	private LocalDate fecha_nac;
 	@Email(message = "El email es inválido", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Flag.CASE_INSENSITIVE)
