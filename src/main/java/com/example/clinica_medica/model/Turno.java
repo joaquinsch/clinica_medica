@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,7 +32,7 @@ public class Turno {
 	private LocalTime hora_turno;
 	@ManyToOne
 	@JoinColumn(name = "id_medico")
-	@JsonBackReference
+	//@JsonManagedReference
 	private Medico un_medico;
 	private Boolean disponibilidad;
 

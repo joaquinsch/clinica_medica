@@ -40,7 +40,7 @@ public class ConsultaMedica {
 	private LocalTime hora_consulta;
 	@ManyToOne
 	@JoinColumn(name = "id_paciente")
-	//@JsonManagedReference
+
 	private Paciente un_paciente;
 	@ManyToOne
 	@JoinColumn(name = "id_medico")
