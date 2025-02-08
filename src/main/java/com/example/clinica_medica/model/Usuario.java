@@ -37,6 +37,7 @@ public class Usuario {
 	private String email;
 	@Pattern(message = "El número de teléfono es inválido", regexp = "^\\d{8,15}$")
 	private String telefono;
+	@Pattern(message = "La dirección es debe tener entre 3 y 30 carácteres", regexp = "^.{3,30}$")
 	private String direccion;
 	
 
