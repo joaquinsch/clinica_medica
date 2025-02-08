@@ -1,5 +1,7 @@
 package com.example.clinica_medica.exception;
 
+import java.time.format.DateTimeParseException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,4 +16,11 @@ public class ValidationsExceptionHandler {
 		ApiError apiError = new ApiError(e.getBindingResult().getFieldError().getDefaultMessage(), e.getCause(), HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 	}
+	@ExceptionHandler(value = {DateTimeParseException.class})
+	public ResponseEntity<ApiError> handleDateTimeParseException(DateTimeParseException e){
+		String mensaje = "La fecha debe ser ingresada con el formato: dd/mm/yyyy";
+		ApiError apiError = new ApiError(mensaje, e.getCause(), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+	}
+	
 }

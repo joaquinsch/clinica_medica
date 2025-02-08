@@ -26,7 +26,7 @@ public class Paciente extends Usuario {
 	
 	@NotNull(message = "Debes colocar si tiene obra social o no")
 	private Boolean tiene_obra_social;
-	@JsonBackReference
+	//@JsonBackReference
 	@OneToMany(mappedBy = "un_paciente")
 	private List<ConsultaMedica> consultas;
 	

@@ -40,7 +40,7 @@ public class ConsultaMedica {
 	private LocalTime hora_consulta;
 	@ManyToOne
 	@JoinColumn(name = "id_paciente")
-	@JsonManagedReference
+	//@JsonManagedReference
 	private Paciente un_paciente;
 	@ManyToOne
 	@JoinColumn(name = "id_medico")
@@ -57,11 +57,11 @@ public class ConsultaMedica {
 	// ESTO NO TIENE LADO INVERSO (TENER CUIDADO)
 	@OneToOne
 	@JoinColumn(name = "codigo_paquete")
-	@JsonManagedReference
+	//@JsonManagedReference
 	private PaqueteServicio un_paquete_servicio;
 	@ManyToOne
 	@JoinColumn(name = "codigo_servicio")
-	@JsonManagedReference
+	//@JsonManagedReference
 	private ServicioMedico un_servicio_medico;
 
 	private Double monto_total;

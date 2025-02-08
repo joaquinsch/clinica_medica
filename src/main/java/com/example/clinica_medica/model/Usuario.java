@@ -39,6 +39,5 @@ public class Usuario {
 	private String telefono;
 	@Pattern(message = "La dirección es debe tener entre 3 y 30 carácteres", regexp = "^.{3,30}$")
 	private String direccion;
-	
 
 }

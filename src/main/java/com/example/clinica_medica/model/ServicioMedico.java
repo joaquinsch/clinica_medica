@@ -32,11 +32,11 @@ public class ServicioMedico {
 	private Double precio;
 
 	@ManyToMany(mappedBy = "lista_servicios_incluidos")
-	@JsonBackReference
+	//@JsonBackReference
 	private List<PaqueteServicio> lista_paquetes;
 	
 	@OneToMany(mappedBy = "un_servicio_medico")
-	@JsonBackReference
+	//@JsonBackReference
 	private List<ConsultaMedica> lista_consultas;
 
 }
