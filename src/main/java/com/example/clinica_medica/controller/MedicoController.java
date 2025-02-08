@@ -1,7 +1,5 @@
 package com.example.clinica_medica.controller;
 
-import java.util.NoSuchElementException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,47 +26,28 @@ public class MedicoController {
 	private MedicoService medicoService;
 
 	@PostMapping("/crear")
-	public ResponseEntity<?> crearMedico(@Valid @RequestBody Medico medico) {
-		try {
-			medicoService.guardarMedico(medico);
-			return ResponseEntity.status(HttpStatus.CREATED).body(medico);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
-		}
+	public ResponseEntity<Medico> crearMedico(@Valid @RequestBody Medico medico) {
+		Medico medicoGuardado = medicoService.guardarMedico(medico);
+		return new ResponseEntity<>(medicoGuardado, HttpStatus.CREATED);
+
 	}
 
 	@GetMapping("/buscar/{id_medico}")
-	public ResponseEntity<?> buscarMedico(@PathVariable Long id_medico) {
-		try {
-			Medico buscado = medicoService.buscarMedico(id_medico);
-			return ResponseEntity.status(HttpStatus.OK).body(buscado);
-		} catch (NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el médico");
-		}
+	public ResponseEntity<Medico> buscarMedico(@PathVariable Long id_medico) {
+		Medico buscado = medicoService.buscarMedico(id_medico);
+		return new ResponseEntity<>(buscado, HttpStatus.OK);
 	}
 
 	@PutMapping("/editar")
-	public ResponseEntity<?> editarMedico(@Valid @RequestBody Medico medico) {
-		try {
-			Medico aEditar = medicoService.editarMedico(medico);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(aEditar);
-		} catch (NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el médico");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
-		}
+	public ResponseEntity<Medico> editarMedico(@Valid @RequestBody Medico medico) {
+		Medico aEditar = medicoService.editarMedico(medico);
+		return new ResponseEntity<>(aEditar, HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("/eliminar/{id_medico}")
-	public ResponseEntity<?> eliminarMedico(@PathVariable Long id_medico){
-		try {
-			medicoService.eliminarMedico(id_medico);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Se ha eliminado");
-		} catch(NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el médico");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
-		}
+	public ResponseEntity<Medico> eliminarMedico(@PathVariable Long id_medico) {
+		medicoService.eliminarMedico(id_medico);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 }
