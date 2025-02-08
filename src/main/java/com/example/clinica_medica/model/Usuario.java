@@ -2,9 +2,12 @@ package com.example.clinica_medica.model;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Pattern.Flag;
 import lombok.AllArgsConstructor;
@@ -27,6 +30,8 @@ public class Usuario {
 	@NotBlank(message = "El DNI no fué ingresado")
 	@Pattern(message = "El DNI debe ser un número de 8 dígitos", regexp = "^\\d{8}$")
 	private String dni;
+	@NotNull(message = "La fecha de nacimiento no fué ingresada")
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate fecha_nac;
 	@Email(message = "El email es inválido", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Flag.CASE_INSENSITIVE)
 	private String email;
