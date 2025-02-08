@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.clinica_medica.model.Paciente;
 import com.example.clinica_medica.services.PacienteService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/pacientes")
 public class PacienteController {
@@ -23,7 +25,7 @@ public class PacienteController {
 	private PacienteService pacienteService;
 
 	@PostMapping("/crear")
-	public ResponseEntity<Paciente> crearPaciente(@RequestBody Paciente paciente) {
+	public ResponseEntity<Paciente> crearPaciente(@Valid @RequestBody Paciente paciente) {
 		Paciente pacienteGuardado = pacienteService.guardarPaciente(paciente);
 		return new ResponseEntity<>(pacienteGuardado, HttpStatus.CREATED);
 

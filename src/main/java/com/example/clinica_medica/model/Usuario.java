@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern.Flag;
 import lombok.AllArgsConstructor;
 
@@ -18,16 +19,13 @@ import lombok.Setter;
 @MappedSuperclass // esto es para que puedan heredar otras clases sin que esta sea una tabla
 public class Usuario {
 
+	@NotBlank(message = "El nombre no fué ingresado")
 	private String nombre;
 	private String apellido;
 	private String dni;
 	private LocalDate fecha_nac;
-	@Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Flag.CASE_INSENSITIVE)
+	@Email(message = "El email es inválido", regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}", flags = Flag.CASE_INSENSITIVE)
 	private String email;
 	private String telefono;
 	private String direccion;
-	
-	public void setEmail(String email) {
-		this.email = email;
-	}
 }
