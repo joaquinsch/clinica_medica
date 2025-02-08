@@ -18,6 +18,8 @@ import com.example.clinica_medica.model.Medico;
 
 import com.example.clinica_medica.services.MedicoService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/medicos")
 public class MedicoController {
@@ -26,7 +28,7 @@ public class MedicoController {
 	private MedicoService medicoService;
 
 	@PostMapping("/crear")
-	public ResponseEntity<?> crearMedico(@RequestBody Medico medico) {
+	public ResponseEntity<?> crearMedico(@Valid @RequestBody Medico medico) {
 		try {
 			medicoService.guardarMedico(medico);
 			return ResponseEntity.status(HttpStatus.CREATED).body(medico);
@@ -46,7 +48,7 @@ public class MedicoController {
 	}
 
 	@PutMapping("/editar")
-	public ResponseEntity<?> editarPaciente(@RequestBody Medico medico) {
+	public ResponseEntity<?> editarMedico(@Valid @RequestBody Medico medico) {
 		try {
 			Medico aEditar = medicoService.editarMedico(medico);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body(aEditar);
@@ -58,7 +60,7 @@ public class MedicoController {
 	}
 
 	@DeleteMapping("/eliminar/{id_medico}")
-	public ResponseEntity<?> eliminarPaciente(@PathVariable Long id_medico){
+	public ResponseEntity<?> eliminarMedico(@PathVariable Long id_medico){
 		try {
 			medicoService.eliminarMedico(id_medico);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Se ha eliminado");
