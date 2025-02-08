@@ -39,7 +39,7 @@ public class PacienteController {
 	}
 
 	@PutMapping("/editar")
-	public ResponseEntity<Paciente> editarPaciente(@RequestBody Paciente paciente) {
+	public ResponseEntity<Paciente> editarPaciente(@Valid @RequestBody Paciente paciente) {
 		Paciente aEditar = pacienteService.editarPaciente(paciente);
 		return new ResponseEntity<>(aEditar, HttpStatus.ACCEPTED);
 	}
