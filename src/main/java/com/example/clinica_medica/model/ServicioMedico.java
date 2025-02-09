@@ -2,7 +2,6 @@ package com.example.clinica_medica.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -35,7 +34,7 @@ public class ServicioMedico {
 	@ManyToMany(mappedBy = "lista_servicios_incluidos")
 	@JsonIgnore
 	private List<PaqueteServicio> lista_paquetes;
-	
+
 	@OneToMany(mappedBy = "un_servicio_medico")
 	@JsonIgnore
 	private List<ConsultaMedica> lista_consultas;
