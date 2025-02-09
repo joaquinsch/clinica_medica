@@ -3,6 +3,8 @@ package com.example.clinica_medica.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,15 +34,19 @@ public class ConsultaMedica {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id_consulta_medica;
 
+	@NotNull(message = "La fecha de la consulta no fue ingresada")
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate fecha_consulta;
-
+	@NotNull(message = "La hora de la consulta no fue ingresada")
+	@JsonFormat(pattern = "HH:mm")
 	private LocalTime hora_consulta;
 	@ManyToOne
 	@JoinColumn(name = "id_paciente")
-
+	@NotNull(message = "No se ha ingresado un paciente")
 	private Paciente un_paciente;
 	@ManyToOne
 	@JoinColumn(name = "id_medico")
+	@NotNull(message = "No se ha ingresado un médico")
 	private Medico un_medico;
 
 	/*

@@ -18,7 +18,7 @@ public class ValidationsExceptionHandler {
 	}
 	@ExceptionHandler(value = {DateTimeParseException.class})
 	public ResponseEntity<ApiError> handleDateTimeParseException(DateTimeParseException e){
-		String mensaje = "La fecha debe ser ingresada con el formato: dd/mm/yyyy";
+		String mensaje = "Debes ingresar la fecha y la hora con los formatos: 'dd/mm/yyyy' y 'hh:mm' respectivamente";
 		ApiError apiError = new ApiError(mensaje, e.getCause(), HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 	}
