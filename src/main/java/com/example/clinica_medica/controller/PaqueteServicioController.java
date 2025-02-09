@@ -1,6 +1,5 @@
 package com.example.clinica_medica.controller;
 
-import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,49 +24,29 @@ public class PaqueteServicioController {
 	private PaqueteServicioService paqueteServicioService;
 
 	@PostMapping("/crear")
-	public ResponseEntity<?> crearPaqueteServicio(@RequestBody PaqueteServicio paqueteServicio) {
-		try {
-			PaqueteServicio nuevoPaquete = paqueteServicioService.guardarPaqueteServicio(paqueteServicio);
-			return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPaquete);
-		} catch (NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
-		}
+	public ResponseEntity<PaqueteServicio> crearPaqueteServicio(@RequestBody PaqueteServicio paqueteServicio) {
+		PaqueteServicio nuevoPaquete = paqueteServicioService.guardarPaqueteServicio(paqueteServicio);
+		return new ResponseEntity<>(nuevoPaquete, HttpStatus.CREATED);
+
 	}
 
 	@GetMapping("/buscar/{id_paquete}")
-	public ResponseEntity<?> buscarPaqueteServicio(@PathVariable Long id_paquete) {
-		try {
-			PaqueteServicio paqueteBuscado = paqueteServicioService.buscarPaqueteServicio(id_paquete);
-			return ResponseEntity.status(HttpStatus.OK).body(paqueteBuscado);
-		} catch (NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el paquete");
-		}
+	public ResponseEntity<PaqueteServicio> buscarPaqueteServicio(@PathVariable Long id_paquete) {
+
+		PaqueteServicio paqueteBuscado = paqueteServicioService.buscarPaqueteServicio(id_paquete);
+		return new ResponseEntity<>(paqueteBuscado, HttpStatus.OK);
 	}
 
 	@PutMapping("/editar")
-	public ResponseEntity<?> editarPaqueteServicio(@RequestBody PaqueteServicio paqueteServicio) {
-		try {
-			PaqueteServicio paqueteEditado = paqueteServicioService.editarPaqueteServicio(paqueteServicio);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body(paqueteEditado);
-		} catch (NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el paquete");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
-		}
+	public ResponseEntity<PaqueteServicio> editarPaqueteServicio(@RequestBody PaqueteServicio paqueteServicio) {
+
+		PaqueteServicio paqueteEditado = paqueteServicioService.editarPaqueteServicio(paqueteServicio);
+		return new ResponseEntity<>(paqueteEditado, HttpStatus.ACCEPTED);
 	}
 
 	@DeleteMapping("/eliminar/{id_paquete}")
-	public ResponseEntity<?> eliminarPaqueteServicio(@PathVariable Long id_paquete) {
-		try {
-			paqueteServicioService.eliminarPaqueteServicio(id_paquete);
-			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Paquete eliminado correctamente");
-		} catch (NoSuchElementException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El paquete no existe");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Algo salió mal");
-		}
+	public ResponseEntity<PaqueteServicio> eliminarPaqueteServicio(@PathVariable Long id_paquete) {
+		paqueteServicioService.eliminarPaqueteServicio(id_paquete);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

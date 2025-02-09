@@ -16,6 +16,8 @@ import com.example.clinica_medica.model.ConsultaMedica;
 
 import com.example.clinica_medica.services.ConsultaMedicaService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/consultasmedicas")
 public class ConsultaMedicaController {
@@ -39,27 +41,19 @@ public class ConsultaMedicaController {
 	 * - (hecho)VERIFICAR TURNO AL ELIMINAR CONSULTA MEDICA, DEBE REESTABLECERSE EL TURNO.
 	 * - (hecho)VERIFICAR QUE SI SE ELIMINA CONSULTA MEDICA, DEBE ELIMINARSE EL PAQUETE ASOCIADO A ELLA.
 	 * -----------------------------------------------------------------
-	 * - (no se)REFACTOREAR HAYTURNODISPONIBLE PARA Q LLAME A SERVICES SOLO
 	 * 
 	 * **********************************
 	 * 
 	 * -REVISAR RELACION N a N DE PAQUETES Y SERVICIOS (NO SE SI ES NECESARIO GUARDAR
 	 * ESTO) 
-	 * - PREGUNTAR POR CONSULTA MEDICA CON PAQUETE. YA QUE SE ESTÁ ASUMIENDO
-	 * QUE UN SOLO MÉDICO SE HACE CARGO DE LA CONSULTA CON LOS SERVICIOS DEL
-	 * PAQUETE... 
-	 * - FECHA Y HORA DE UNA CONSULTA CON PAQUETE, SE ESTÁ ASUMIENDO QUE
-	 * EN ESA FECHA Y HORA DE LA CONSULTA SE HACE TODo LO QUE TRAE EL PAQUETE
-	 * DENTRO...
-	 * 
-	 * 
+
 	 */
 
 	@Autowired
 	private ConsultaMedicaService consultaMedicaService;
 
 	@PostMapping("/crear")
-	public ResponseEntity<ConsultaMedica> crearConsultaMedica(@RequestBody ConsultaMedica consulta) {
+	public ResponseEntity<ConsultaMedica> crearConsultaMedica(@Valid @RequestBody ConsultaMedica consulta) {
 		ConsultaMedica consultaGuardada = consultaMedicaService.guardarConsultaMedica(consulta);
 		return new ResponseEntity<>(consultaGuardada, HttpStatus.CREATED);
 	}
@@ -71,7 +65,7 @@ public class ConsultaMedicaController {
 	}
 	
 	@PutMapping("/editar")
-	public ResponseEntity<ConsultaMedica> editarConsultaMedica(@RequestBody ConsultaMedica consultaMedica){
+	public ResponseEntity<ConsultaMedica> editarConsultaMedica(@Valid @RequestBody ConsultaMedica consultaMedica){
 		ConsultaMedica consultaBuscada = consultaMedicaService.editarConsultaMedica(consultaMedica);
 		return new ResponseEntity<>(consultaBuscada, HttpStatus.ACCEPTED);
 	}

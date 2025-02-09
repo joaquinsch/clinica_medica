@@ -13,13 +13,13 @@ public class ValidationsExceptionHandler {
 
 	@ExceptionHandler(value = {MethodArgumentNotValidException.class})
 	public ResponseEntity<ApiError> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
-		ApiError apiError = new ApiError(e.getBindingResult().getFieldError().getDefaultMessage(), e.getCause(), HttpStatus.BAD_REQUEST);
+		ApiError apiError = new ApiError(e.getBindingResult().getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 	}
 	@ExceptionHandler(value = {DateTimeParseException.class})
 	public ResponseEntity<ApiError> handleDateTimeParseException(DateTimeParseException e){
 		String mensaje = "Debes ingresar la fecha y la hora con los formatos: 'dd/mm/yyyy' y 'hh:mm' respectivamente";
-		ApiError apiError = new ApiError(mensaje, e.getCause(), HttpStatus.BAD_REQUEST);
+		ApiError apiError = new ApiError(mensaje, HttpStatus.BAD_REQUEST);
 		return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 	}
 	
