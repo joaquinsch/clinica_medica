@@ -1,12 +1,12 @@
 package com.example.clinica_medica.tests;
 
 import static org.mockito.Mockito.times;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withAccepted;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDate;
 
+import org.junit.After;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,6 +20,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.example.clinica_medica.controller.PacienteController;
+import com.example.clinica_medica.exception.ApiExceptionHandler;
+import com.example.clinica_medica.exception.PacienteNoEncontradoError;
 import com.example.clinica_medica.model.Paciente;
 import com.example.clinica_medica.services.PacienteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,7 +44,9 @@ public class PacienteControllerTests {
 
     @BeforeEach
     public void setUp() {
-    	this.mockMvc = MockMvcBuilders.standaloneSetup(pacienteController).build();
+    	this.mockMvc = MockMvcBuilders.standaloneSetup(pacienteController)
+    			.setControllerAdvice(new ApiExceptionHandler())// esto se necesita para las excepciones personalizadas 
+    			.build();
     	objectMapper = new ObjectMapper();
     	// necesario para usar LocalDate
     	objectMapper.registerModule(new JavaTimeModule());
@@ -56,6 +60,11 @@ public class PacienteControllerTests {
         paciente.setTelefono("123456789");
         paciente.setDireccion("Calle falsa 123");
         paciente.setTiene_obra_social(true);
+    }
+    
+    @After
+    public void tearDown() {
+        Mockito.reset(pacienteController);
     }
 	
 	@Test
@@ -131,5 +140,16 @@ public class PacienteControllerTests {
 				.andExpect(jsonPath("$.telefono").value("1166885544"))
 				.andExpect(jsonPath("$.direccion").value("Calle falsa 124"))
 				.andExpect(jsonPath("$.tiene_obra_social").value(false));
+	}
+	
+	@Test //@Disabled
+	public void siSeIntentaBuscarPacienteQueNoExisteDaError() throws Exception{
+		Mockito.when(pacienteService.buscarPaciente(2L)).thenThrow(new PacienteNoEncontradoError("El paciente con id: " + 2 + " no existe"));
+		
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/pacientes/buscar/2")
+				).andExpect(status().isNotFound())
+				.andExpect(jsonPath("$.mensaje").value("El paciente con id: " + 2 + " no existe"))
+				.andExpect(jsonPath("$.httpStatus").value("NOT_FOUND"));
+
 	}
 }

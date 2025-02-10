@@ -62,8 +62,8 @@ public class PaqueteServicioService {
 	}
 
 	public void eliminarPaqueteServicio(Long id_paquete) {
-		PaqueteServicio paquete = buscarPaqueteServicio(id_paquete);
-		paqueteServicioRepo.delete(paquete);
+		buscarPaqueteServicio(id_paquete);
+		paqueteServicioRepo.deleteById(id_paquete);
 	}
 
 }
