@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
@@ -66,6 +67,12 @@ public class ApiExceptionHandler {
 	public ResponseEntity<ApiError> handleMedicoNoEncontradoError(MedicoNoEncontradoError e) {
 		ApiError apiError = new ApiError(e.getMessage(), HttpStatus.NOT_FOUND);
 		return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+	public ResponseEntity<ApiError> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e){
+		ApiError apiError = new ApiError("Se ingresó un valor incorrecto", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
 	}
 
 }
