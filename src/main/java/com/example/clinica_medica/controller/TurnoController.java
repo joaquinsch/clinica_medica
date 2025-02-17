@@ -1,6 +1,7 @@
 package com.example.clinica_medica.controller;
 
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class TurnoController {
 	private TurnoService turnoService;
 
 	@PostMapping("/crear")
-	public ResponseEntity<Turno> crearTurno(@RequestBody Turno turno) {
+	public ResponseEntity<Turno> crearTurno(@Valid @RequestBody Turno turno) {
 		Turno turnoGuardado = turnoService.guardarTurno(turno);
 		return new ResponseEntity<>(turnoGuardado, HttpStatus.CREATED);
 	}

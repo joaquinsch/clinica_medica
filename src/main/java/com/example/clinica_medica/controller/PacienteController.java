@@ -32,7 +32,7 @@ public class PacienteController {
 	}
 
 	@GetMapping("/buscar/{id_paciente}")
-	public ResponseEntity<Paciente> buscarPaciente(@PathVariable Long id_paciente) {
+	public ResponseEntity<Paciente> buscarPaciente(@Valid @PathVariable Long id_paciente) {
 		Paciente buscado = pacienteService.buscarPaciente(id_paciente);
 		return new ResponseEntity<>(buscado, HttpStatus.OK);
 
