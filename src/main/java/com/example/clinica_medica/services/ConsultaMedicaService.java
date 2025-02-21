@@ -51,13 +51,19 @@ public class ConsultaMedicaService {
 		if (consultaConPaquete(consulta)) {
 			PaqueteServicio paqueteServicio = paqueteService
 					.buscarPaqueteServicio(consulta.getUn_paquete_servicio().getCodigo_paquete());
-			// si tiene obra social aplica descuento de 20%
-			if (pacienteService.buscarPaciente(consulta.getUn_paciente().getId_paciente()).getTiene_obra_social()) {
-				Double precioFinal = paqueteServicio.obtenerPrecioConDescuento(paqueteServicio.getPrecio_paquete(),
-						DESCUENTO_OBRA_SOCIAL);
-				paqueteServicio.setPrecio_paquete(precioFinal);
+			Long id_consulta_con_paquete = obtenerIdDeConsultaConMismoPaquete(paqueteServicio);
+
+			if (id_consulta_con_paquete == -1) {
+				// si tiene obra social aplica descuento de 20%
+				if (pacienteService.buscarPaciente(consulta.getUn_paciente().getId_paciente()).getTiene_obra_social()) {
+					Double precioFinal = paqueteServicio.obtenerPrecioConDescuento(paqueteServicio.getPrecio_paquete(),
+							DESCUENTO_OBRA_SOCIAL);
+					paqueteServicio.setPrecio_paquete(precioFinal);
+				}
+				consulta.setMonto_total(paqueteServicio.getPrecio_paquete());
+			} else {
+				throw new PaqueteNoDisponibleError("El paquete ya se encuentra asociado a otra consulta médica");
 			}
-			consulta.setMonto_total(paqueteServicio.getPrecio_paquete());
 		} else {
 			ServicioMedico servicioMedico = servicioMedicoService
 					.buscarServicioMedico(consulta.getUn_servicio_medico().getCodigo_servicio());
