@@ -22,6 +22,9 @@ public class TurnoService {
 	private MedicoService medicoService;
 
 	public Turno guardarTurno(Turno turno) {
+		if (turno.getFecha_turno().isBefore(LocalDate.now())){
+			throw new TurnoNoDisponibleError("La fecha es inválida");
+		}
 		List<Turno> turnosDelMedico = medicoService.buscarMedico(turno.getUn_medico().getId_medico())
 				.getTurnos_disponibles();
 		for (Turno turnoDelMedico : turnosDelMedico) {
@@ -48,8 +51,7 @@ public class TurnoService {
 	}
 
 	public void eliminarTurno(Long id_turno) {
-		@SuppressWarnings("unused")
-		Turno turno = buscarTurno(id_turno);
+		buscarTurno(id_turno);
 		turnoRepo.deleteById(id_turno);
 	}
 
