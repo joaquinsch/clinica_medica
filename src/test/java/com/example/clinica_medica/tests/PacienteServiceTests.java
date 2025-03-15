@@ -73,9 +73,9 @@ public class PacienteServiceTests {
 		paciente.setNombre("carlos");
 		Mockito.when(pacienteRepo.findById(2L)).thenReturn(Optional.empty());
 
-		Assertions.assertThrows(PacienteNoEncontradoError.class, () -> {
-		        pacienteService.buscarPaciente(2L);
-		   });
+		Assertions.assertThrows(PacienteNoEncontradoError.class, () ->
+		        pacienteService.buscarPaciente(2L)
+		   );
 	}
 
 	@Test
@@ -83,11 +83,12 @@ public class PacienteServiceTests {
 		Paciente paciente = new Paciente();
 		paciente.setId_paciente(2L);
 		paciente.setNombre("carlos");
-		Mockito.when(pacienteRepo.findById(2L)).thenReturn(Optional.empty());
+		Mockito.when(pacienteRepo.findById(2L)).thenReturn(Optional.of(paciente));
+		Mockito.when(pacienteService.buscarPaciente(2L)).thenThrow(new PacienteNoEncontradoError("El paciente con id: 2 no existe"));
 
-		Assertions.assertThrows(PacienteNoEncontradoError.class, () -> {
-		        pacienteService.editarPaciente(paciente);
-		   });
+		Assertions.assertThrows(PacienteNoEncontradoError.class, () ->
+		        pacienteService.editarPaciente(paciente)
+		   );
 	}
 
 	@Test
