@@ -22,7 +22,7 @@ import com.example.clinica_medica.services.TurnoService;
 public class TurnoController {
 	/*
 	 * Es necesario para agregar turnos a un medico. Se debe tener al medico creado,
-	 * y luego crear el turno asociandolo al medico.
+	 * y luego crear el turno asociandolo al médico.
 	 */
 
 	@Autowired
