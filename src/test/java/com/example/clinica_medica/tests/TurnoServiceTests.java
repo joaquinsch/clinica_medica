@@ -52,7 +52,7 @@ public class TurnoServiceTests {
     public void deberiaGuardarElTurno(){
         Turno turno = new Turno();
         turno.setId_turno(1L);
-        turno.setFecha_turno(LocalDate.of(2025, 3,16));
+        turno.setFecha_turno(LocalDate.of(2025, 12,16));
         turno.setHora_turno(LocalTime.of(19, 0));
         turno.setUn_medico(med);
 
